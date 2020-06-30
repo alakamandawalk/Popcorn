@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Popcorn</string>
+
+
+    <string name="authors_action_bar_title">කතෲන්</string>
+    <string name="author_profile_action_bar_title">කතෲගේ පැතිකඩ</string>
+    <string name="search_hint">සොයන්න</string>
+    <string name="author">කතෲ</string>
+    <string name="download">බාගන්න</string>
+    <string name="remove">ඉවත් කරන්න</string>
+    <string name="playlist">ධාවන ලැයිස්තුව</string>
+    <string name="related">ආශ්‍රිත</string>
+    <string name="settings">සැකසුම්</string>
+    <string name="theme">මුහුණුවර</string>
+    <string name="dark_mode">අඳුරු පසුබිම</string>
+    <string name="categories">වර්ගීකරණය</string>
+    <string name="show_all">සියල්ලම බලන්න</string>
+    <string name="show_less">හකුලන්න</string>
+    <string name="sort_by">පිළිවෙල</string>
+    <string name="cant_connect">මේ මොහොතේ සම්බන්ද විය නොහැක</string>
+    <string name="read_downloads">බාගත් කතා කියවන්න</string>
+    <string name="cancel">අවලංගු කරන්න</string>
+    <string name="home">ප්‍රධාන පිටුව</string>
+    <string name="downloads">බාගැනීම්</string>
+    <string name="messages">පණිවිඩ</string>
+    <string name="authors">කතෲන්</string>
+    <string name="downloading">බාගනිමින්…</string>
+    <string name="removing">ඉවත් කරමින්…</string>
+    <string name="delete">ඉවත් කරන්න</string>
+    <string name="delete_message">ඔබට මෙම කථාව බාගත කිරීම් අතරින් ඉවත් කිරීමට අවශ්‍යමද?</string>
+    <string name="yes">ඔව්</string>
+    <string name="no">නැත</string>
+    <string name="language">භාශාව</string>
+    <string name="stories">කථාංග</string>
+    <string name="newest_first">නව කථා පළමුව</string>
+    <string name="oldest_first">පැරණි කථා පළමුව</string>
+    <string name="shuffle">කළවම් කර බලන්න</string>
+    <string name="changeLanguage">භාශාව වෙනස් කරන්න</string>
+</resources>

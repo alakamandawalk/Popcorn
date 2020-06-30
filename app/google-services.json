@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "175760839449",
+    "firebase_url": "https://popcorn-eb65b.firebaseio.com",
+    "project_id": "popcorn-eb65b",
+    "storage_bucket": "popcorn-eb65b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:175760839449:android:f94f36d7d7fb2025f72b88",
+        "android_client_info": {
+          "package_name": "com.alakamandawalk.popcorn"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "175760839449-54r6kc3b56rvlprjn5bi3rd40ks2bcjh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.alakamandawalk.popcorn",
+            "certificate_hash": "b173f3408cba5f7dc742e3c9f34dd7e6dd18f628"
+          }
+        },
+        {
+          "client_id": "175760839449-p94ocrtd6k5fjtiraut06e49l2tg0u7u.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYId97bjQasrVUs4Dthy-XGJ2zK05gBg4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "175760839449-p94ocrtd6k5fjtiraut06e49l2tg0u7u.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
