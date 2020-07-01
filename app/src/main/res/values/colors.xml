@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="black">#000000</color>
+    <color name="white">#ffffff</color>
     <color name="primaryColor">#ffffff</color>
     <color name="primaryLightColor">#ffffff</color>
     <color name="primaryDarkColor">#aaaaaa</color>
@@ -20,5 +22,4 @@
     <color name="bottomNavBgColor">#ffffff</color>
     <color name="relatedListBgColor">#cc000000</color>
     <color name="imgOverlay">#00000000</color>
-    <color name="playlistImgOverlay">#4d000000</color>
 </resources>

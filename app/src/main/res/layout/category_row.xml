@@ -28,7 +28,11 @@
             android:textColor="@color/categoryRowBottomTextColor"
             android:textSize="20sp"
             android:paddingHorizontal="10dp"
-            android:layout_centerVertical="true"/>
+            android:layout_centerVertical="true"
+            android:shadowColor="@color/black"
+            android:shadowDx="1"
+            android:shadowDy="1"
+            android:shadowRadius="2"/>
 
     </RelativeLayout>
 

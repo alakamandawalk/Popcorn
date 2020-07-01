@@ -70,15 +70,6 @@
 
             </LinearLayout>
 
-            <ImageButton
-                android:id="@+id/optionIb"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_more"
-                android:background="@null"
-                android:padding="10dp"
-                android:tint="@color/primaryTextColor"/>
-
         </LinearLayout>
 
     </LinearLayout>

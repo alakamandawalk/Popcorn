@@ -118,7 +118,6 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
         public CardView storyCv;
         public ImageView storyImageIv;
         public TextView storyNameTv, storyDateTv, authorNameTv;
-        public ImageButton optionIb;
 
         public StoryViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -128,7 +127,6 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
             storyNameTv = itemView.findViewById(R.id.storyNameTv);
             storyDateTv = itemView.findViewById(R.id.storyDateTv);
             authorNameTv = itemView.findViewById(R.id.authorNameTv);
-            optionIb = itemView.findViewById(R.id.optionIb);
         }
     }
 }

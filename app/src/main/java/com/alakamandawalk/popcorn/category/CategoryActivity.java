@@ -42,7 +42,7 @@ import java.util.Locale;
 
 public class CategoryActivity extends AppCompatActivity {
 
-    ImageButton backIb, optionIb;
+    ImageButton backIb;
     RecyclerView categoryStoryRv;
     TextView titleTv;
     ImageView categoryImgIv;
@@ -68,7 +68,6 @@ public class CategoryActivity extends AppCompatActivity {
         final String categoryId = intent.getStringExtra("categoryId");
 
         backIb = findViewById(R.id.backIb);
-        optionIb = findViewById(R.id.optionIb);
         categoryStoryRv = findViewById(R.id.categoryStoryRv);
         titleTv = findViewById(R.id.titleTv);
         categoryImgIv = findViewById(R.id.categoryImgIv);

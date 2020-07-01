@@ -10,6 +10,7 @@
         <item name="colorSecondaryVariant">@color/secondaryLightColor</item>
         <item name="android:textColor">@color/primaryTextColor</item>
         <item name="android:textColorHint">@color/primaryTextColor</item>
+        <item name="android:navigationBarColor">@color/primaryDarkColor</item>
     </style>
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
