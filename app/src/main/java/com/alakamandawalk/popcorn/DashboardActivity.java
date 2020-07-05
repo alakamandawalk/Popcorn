@@ -16,7 +16,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -27,6 +26,12 @@ import com.alakamandawalk.popcorn.download.DownloadsActivity;
 import com.alakamandawalk.popcorn.download.DownloadsFragment;
 import com.alakamandawalk.popcorn.home.HomeFragment;
 import com.alakamandawalk.popcorn.message.MessagesFragment;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdSize;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -41,6 +46,7 @@ public class DashboardActivity extends AppCompatActivity {
     ImageButton searchIb;
     public static ImageButton menuIb;
     public static TextView titleTv;
+    AdView mAdView;
 
     FrameLayout frameLayout;
     BottomNavigationView bottomNav;
@@ -74,6 +80,21 @@ public class DashboardActivity extends AppCompatActivity {
                 startActivity(new Intent(DashboardActivity.this, SearchActivity.class));
             }
         });
+
+        MobileAds.initialize(this, "ca-app-pub-4079566491683275~2327287115");
+
+        AdView adView = new AdView(this);
+        adView.setAdSize(AdSize.BANNER);
+        adView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
+
+        MobileAds.initialize(this, new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+            }
+        });
+        mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
 
         checkUserStatus();
         checkNetworkStatus(from);

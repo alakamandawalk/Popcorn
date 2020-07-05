@@ -12,14 +12,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"/>
+        android:layout_centerVertical="true"
+        android:src="@drawable/popcorn_logo"
+        android:layout_marginHorizontal="100dp"/>
 
     <ImageView
         android:id="@+id/copyrightsLogoImg"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"
-        android:layout_margin="10dp"/>
+        android:src="@drawable/alakamandawa_gray"
+        android:layout_margin="30dp"/>
 
 </RelativeLayout>

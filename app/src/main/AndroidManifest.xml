@@ -12,6 +12,11 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <meta-data
+            android:name="com.google.android.gms.ads.APPLICATION_ID"
+            android:value="ca-app-pub-4079566491683275~2327287115"/>
+
         <activity android:name=".category.CategoryActivity"></activity>
         <activity android:name=".author.AuthorProfileActivity" />
         <activity android:name=".playlist.PlaylistActivity" />

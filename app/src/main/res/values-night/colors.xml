@@ -21,5 +21,5 @@
     <color name="msgTagStoryNameTextColor">#cccccc</color>
     <color name="bottomNavBgColor">#1b1b1b</color>
     <color name="relatedListBgColor">#cc000000</color>
-    <color name="imgOverlay">#4d000000</color>
+    <color name="imgOverlay">#33000000</color>
 </resources>

@@ -17,8 +17,11 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.text.format.DateFormat;
 import android.view.View;
@@ -36,6 +39,10 @@ import com.alakamandawalk.popcorn.localDB.DBHelper;
 import com.alakamandawalk.popcorn.localDB.LocalDBContract;
 import com.alakamandawalk.popcorn.model.StoryData;
 import com.alakamandawalk.popcorn.playlist.PlaylistActivity;
+import com.google.android.gms.ads.AdListener;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.InterstitialAd;
+import com.google.android.gms.ads.MobileAds;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -56,7 +63,7 @@ import java.util.Locale;
 public class ReadStoryActivity extends AppCompatActivity {
 
     ImageButton authorIb, downloadIb, playListIb, relatedStoriesIb;
-    TextView titleTv, storyTv, dateTv, authorNameTv, downloadBtnTipTv;
+    TextView titleTv, storyTv, dateTv, authorNameTv, downloadBtnTipTv, counterTv;
     ImageView storyImg;
     RelativeLayout showRelRl;
     ProgressBar relStoryPb;
@@ -70,12 +77,18 @@ public class ReadStoryActivity extends AppCompatActivity {
     String storyId, storyName, story, storyImage, storyDate, storyCategoryId, storyPlaylistId, storySearchTag;
     String authorId, authorName;
 
+    int readingTime;
+    boolean showAds = false;
+    int counter;
+
     ProgressDialog pd;
 
     RelatedStoryAdapter relatedStoryAdapter;
     List<StoryData> relStoryList;
 
     boolean doubleBackPressedToExitPressedOnce;
+
+    private InterstitialAd mInterstitialAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,11 +113,16 @@ public class ReadStoryActivity extends AppCompatActivity {
         relatedStoriesIb = findViewById(R.id.relatedStoriesIb);
         downloadIb = findViewById(R.id.downloadIb);
         titleTv = findViewById(R.id.titleTv);
+        counterTv = findViewById(R.id.counterTv);
         storyTv = findViewById(R.id.storyTv);
         storyImg = findViewById(R.id.storyImg);
         dateTv = findViewById(R.id.dateTv);
         authorNameTv = findViewById(R.id.authorNameTv);
         downloadBtnTipTv = findViewById(R.id.downloadBtnTipTv);
+
+        MobileAds.initialize(this, "ca-app-pub-4079566491683275~2327287115");
+        mInterstitialAd = new InterstitialAd(ReadStoryActivity.this);
+        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
 
         LinearLayoutManager relStoriesLm =
                 new LinearLayoutManager(this,
@@ -155,17 +173,79 @@ public class ReadStoryActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if (showRel){
-                    showRel=false;
-                    showRelStories(storyCategoryId);
+                if (checkNetworkStatus()){
+                    if (showRel){
+                        showRel=false;
+                        showRelStories(storyCategoryId);
+                    }else {
+                        showRel=true;
+                        showRelStories(storyCategoryId);
+                    }
                 }else {
-                    showRel=true;
-                    showRelStories(storyCategoryId);
+                    Toast.makeText(ReadStoryActivity.this, "no internet!", Toast.LENGTH_SHORT).show();
                 }
             }
         });
 
         checkNightModeActivated();
+
+        initAds();
+    }
+
+    private void initAds() {
+
+        mInterstitialAd.setAdListener(new AdListener() {
+            @Override
+            public void onAdLoaded() {
+                // Code to be executed when an ad finishes loading.
+            }
+
+            @Override
+            public void onAdFailedToLoad(int errorCode) {
+                // Code to be executed when an ad request fails.
+            }
+
+            @Override
+            public void onAdOpened() {
+                // Code to be executed when the ad is displayed.
+            }
+
+            @Override
+            public void onAdClicked() {
+                // Code to be executed when the user clicks on an ad.
+            }
+
+            @Override
+            public void onAdLeftApplication() {
+                // Code to be executed when the user has left the app.
+            }
+
+            @Override
+            public void onAdClosed() {
+                ReadStoryActivity.super.onBackPressed();
+            }
+        });
+    }
+
+    private void countTimeToShowAds() {
+
+        counter=readingTime;
+
+        new CountDownTimer(readingTime*1000, 1000){
+
+            @Override
+            public void onTick(long millisUntilFinished) {
+
+            }
+
+            @Override
+            public void onFinish() {
+                if (checkNetworkStatus()){
+                    showAds=true;
+                    mInterstitialAd.loadAd(new AdRequest.Builder().build());
+                }
+            }
+        }.start();
     }
 
     private void isOnDownloads(String id) {
@@ -216,6 +296,12 @@ public class ReadStoryActivity extends AppCompatActivity {
             storyImg.setImageResource(R.drawable.img_place_holder);
         }
 
+        int wordCount = countWords(story);
+        readingTime = (wordCount/2);
+
+        countTimeToShowAds();
+
+        counterTv.setText(Math.round(readingTime/60)+" min reading");
         titleTv.setText(storyName);
         storyTv.setText(story);
         dateTv.setText(storyDate);
@@ -280,6 +366,12 @@ public class ReadStoryActivity extends AppCompatActivity {
                         Picasso.get().load(R.drawable.img_place_holder).into(storyImg);
                     }
 
+                    int wordCount = countWords(story);
+                    readingTime = (wordCount/2);
+
+                    countTimeToShowAds();
+
+                    counterTv.setText(Math.round(readingTime/60)+" min reading");
                     titleTv.setText(storyName);
                     storyTv.setText(story);
                     dateTv.setText(storyDate);
@@ -294,6 +386,24 @@ public class ReadStoryActivity extends AppCompatActivity {
                 Toast.makeText(ReadStoryActivity.this, ""+databaseError.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private int countWords(String story){
+
+        int count = 0;
+
+        char ch[] = new char[story.length()];
+
+        for (int i=0; i<story.length(); i++){
+
+            ch[i] = story.charAt(i);
+
+            if (((i>0)&&(ch[i]!=' ')&&(ch[i-1]==' '))||((ch[0]!=' ')&&(i==0))){
+                count++;
+            }
+        }
+
+        return count;
     }
 
     private void showRelStories(String categoryId) {
@@ -407,6 +517,27 @@ public class ReadStoryActivity extends AppCompatActivity {
         });
     }
 
+    private boolean checkNetworkStatus(){
+
+        boolean conStatus = false;
+
+        ConnectivityManager conMgr = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        if ( conMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED
+                || conMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED ) {
+
+            conStatus = true;
+
+        }
+        else if ( conMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.DISCONNECTED
+                || conMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.DISCONNECTED) {
+
+            conStatus = false;
+        }
+
+        return conStatus;
+    }
+
     private void checkNightModeActivated(){
 
         SharedPreferences themePref = getSharedPreferences(SettingsActivity.THEME_PREFERENCE, MODE_PRIVATE);
@@ -459,7 +590,16 @@ public class ReadStoryActivity extends AppCompatActivity {
     public void onBackPressed() {
 
         if (doubleBackPressedToExitPressedOnce){
-            super.onBackPressed();
+
+            if (showAds){
+                if (mInterstitialAd.isLoaded()) {
+                    mInterstitialAd.show();
+                } else {
+                    super.onBackPressed();
+                }
+            }else {
+                super.onBackPressed();
+            }
             return;
         }
         this.doubleBackPressedToExitPressedOnce = true;
@@ -472,4 +612,5 @@ public class ReadStoryActivity extends AppCompatActivity {
             }
         }, 2000);
     }
+
 }
