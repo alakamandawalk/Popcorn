@@ -42,7 +42,6 @@
                     android:layout_height="wrap_content"
                     android:textSize="17sp"
                     android:padding="5dp"
-                    android:layout_marginRight="10dp"
                     android:textColor="@color/primaryTextColor"/>
 
                 <LinearLayout
@@ -51,24 +50,27 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/authorNameTv"
+                        android:id="@+id/authorNameAndDateTv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="14sp"
                         android:padding="5dp"
-                        android:textColor="@color/primaryTextColor"/>
-
-                    <TextView
-                        android:id="@+id/storyDateTv"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textSize="14sp"
-                        android:padding="5dp"
-                        android:textColor="@color/primaryTextColor"/>
+                        android:textColor="@color/primaryTextColor"
+                        android:ellipsize="end"
+                        android:maxLines="1"/>
 
                 </LinearLayout>
 
             </LinearLayout>
+
+            <ImageView
+                android:id="@+id/premiumIcon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="10dp"
+                android:src="@drawable/ic_premium"
+                android:background="@null"
+                android:tint="@color/gold"/>
 
         </LinearLayout>
 

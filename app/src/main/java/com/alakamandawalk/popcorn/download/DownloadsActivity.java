@@ -176,6 +176,14 @@ public class DownloadsActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        checkNightModeActivated();
+        Configuration configuration = new Configuration();
+        setLocale(configuration);
+        super.onResume();
+    }
+
+    @Override
     public void onBackPressed() {
         Intent intent = new Intent(DownloadsActivity.this, DashboardActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);

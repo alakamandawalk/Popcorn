@@ -41,8 +41,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textSize="20sp"
-                    android:hint="Search"
-                    android:textColorHint="@color/primaryTextColor"
+                    android:hint="@string/search_hint"
+                    android:textColorHint="@color/primaryTextHintColor"
                     android:textColor="@color/primaryTextColor"
                     android:layout_gravity="center_vertical"/>
 

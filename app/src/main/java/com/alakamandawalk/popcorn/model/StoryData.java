@@ -2,12 +2,12 @@ package com.alakamandawalk.popcorn.model;
 
 public class StoryData {
 
-    String story, storyName, storyId, storyDate, storyImage, storyCategoryId, storyPlaylistId, storySearchTag, authorId;
+    String story, storyName, storyId, storyDate, storyImage, storyCategoryId, storyPlaylistId, storySearchTag, authorId, isPremium;
 
     public StoryData() {
     }
 
-    public StoryData(String story, String storyName, String storyId, String storyDate, String storyImage, String storyCategoryId, String storyPlaylistId, String storySearchTag, String authorId) {
+    public StoryData(String story, String storyName, String storyId, String storyDate, String storyImage, String storyCategoryId, String storyPlaylistId, String storySearchTag, String authorId, String isPremium) {
         this.story = story;
         this.storyName = storyName;
         this.storyId = storyId;
@@ -17,6 +17,7 @@ public class StoryData {
         this.storyPlaylistId = storyPlaylistId;
         this.storySearchTag = storySearchTag;
         this.authorId = authorId;
+        this.isPremium = isPremium;
     }
 
     public String getStory() {
@@ -89,5 +90,13 @@ public class StoryData {
 
     public void setAuthorId(String authorId) {
         this.authorId = authorId;
+    }
+
+    public String getIsPremium() {
+        return isPremium;
+    }
+
+    public void setIsPremium(String isPremium) {
+        this.isPremium = isPremium;
     }
 }

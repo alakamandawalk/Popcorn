@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".home.HomeFragment"
     android:background="@color/primaryBgColor">
 
@@ -10,11 +11,32 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/storyRv"
+        <androidx.core.widget.NestedScrollView
+            android:id="@+id/contentHomeNsv"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:paddingTop="5dp"/>
+            android:layout_height="match_parent"
+            android:scrollbars="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical">
+
+                <com.google.android.ads.nativetemplates.TemplateView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/my_template"
+                    app:gnt_template_type="@layout/gnt_medium_template_view"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/storyRv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="5dp"/>
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
 
         <ProgressBar
             android:id="@+id/homePb"
@@ -33,7 +55,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Can't connect at the moment\npease check the\nCONNECTION\nand try again"
+                android:text="@string/cant_connect"
                 android:textAlignment="center"
                 android:layout_gravity="center_horizontal"
                 android:textColor="@color/primaryTextColor"
@@ -45,7 +67,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:text="retry"
+                android:text="@string/retry"
                 android:textSize="20sp"
                 android:textColor="@color/secondaryColor"
                 android:padding="10sp"

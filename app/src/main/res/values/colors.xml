@@ -4,6 +4,7 @@
     <color name="white">#ffffff</color>
     <color name="primaryColor">#ffffff</color>
     <color name="primaryLightColor">#ffffff</color>
+    <color name="primaryTextHintColor">#6d6d6d</color>
     <color name="primaryDarkColor">#aaaaaa</color>
     <color name="primaryBgColor">#eeeeee</color>
     <color name="secondaryColor">#c0ca33</color>
@@ -22,4 +23,6 @@
     <color name="bottomNavBgColor">#ffffff</color>
     <color name="relatedListBgColor">#cc000000</color>
     <color name="imgOverlay">#00000000</color>
+    <color name="gold">#FFD700</color>
+    <color name="readingTime">#8c9900</color>
 </resources>

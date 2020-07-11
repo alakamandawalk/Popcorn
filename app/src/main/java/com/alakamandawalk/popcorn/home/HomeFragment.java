@@ -1,7 +1,6 @@
 package com.alakamandawalk.popcorn.home;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
@@ -13,6 +12,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.appcompat.widget.PopupMenu;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -30,13 +30,19 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.alakamandawalk.popcorn.MainActivity;
 import com.alakamandawalk.popcorn.R;
 import com.alakamandawalk.popcorn.SettingsActivity;
 import com.alakamandawalk.popcorn.model.StoryData;
 import com.alakamandawalk.popcorn.story.StoryAdapter;
+import com.google.android.ads.nativetemplates.TemplateView;
+import com.google.android.gms.ads.AdLoader;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.formats.UnifiedNativeAd;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -60,6 +66,8 @@ public class HomeFragment extends Fragment {
     ProgressBar homePb;
     LinearLayout retryLl;
     Button retryBtn;
+    NestedScrollView contentHomeNsv;
+    TemplateView templateView;
 
     StoryAdapter storyAdapter;
     List<StoryData> storyList;
@@ -116,12 +124,38 @@ public class HomeFragment extends Fragment {
         homePb = view.findViewById(R.id.homePb);
         retryLl = view.findViewById(R.id.retryLl);
         retryBtn = view.findViewById(R.id.retryBtn);
+        contentHomeNsv = view.findViewById(R.id.contentHomeNsv);
+        templateView = view.findViewById(R.id.my_template);
+        templateView.setVisibility(View.GONE);
 
         LinearLayoutManager storyLayoutManager = new LinearLayoutManager(getActivity());
         storyLayoutManager.setStackFromEnd(true);
         storyLayoutManager.setReverseLayout(true);
         storyRv.setLayoutManager(storyLayoutManager);
         storyList = new ArrayList<>();
+
+        MobileAds.initialize(getActivity(), new OnInitializationCompleteListener() {
+            @Override
+            public void onInitializationComplete(InitializationStatus initializationStatus) {
+
+            }
+        });
+
+        AdLoader.Builder builder = new AdLoader.Builder(getActivity(),getString(R.string.nativead_ad_unit_id));
+        builder.forUnifiedNativeAd(new UnifiedNativeAd.OnUnifiedNativeAdLoadedListener() {
+            @Override
+            public void onUnifiedNativeAdLoaded(UnifiedNativeAd unifiedNativeAd) {
+
+                templateView.setVisibility(View.VISIBLE);
+                templateView.setNativeAd(unifiedNativeAd);
+            }
+        });
+
+        AdLoader adLoader = builder.build();
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adLoader.loadAd(adRequest);
+
+
 
         menuIb.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -165,12 +199,11 @@ public class HomeFragment extends Fragment {
         return conStatus;
     }
 
-    private void loadStories(final String sort) {
-
+    public void loadStories(final String sort) {
 
         if (checkNetworkStatus()){
 
-            storyRv.setVisibility(View.GONE);
+            contentHomeNsv.setVisibility(View.GONE);
             homePb.setVisibility(View.VISIBLE);
             retryLl.setVisibility(View.GONE);
 
@@ -184,15 +217,15 @@ public class HomeFragment extends Fragment {
                         for (DataSnapshot ds: dataSnapshot.getChildren()){
                             StoryData storyData = ds.getValue(StoryData.class);
                             storyList.add(storyData);
-                            Collections.shuffle(storyList);
-                            storyAdapter = new StoryAdapter(getActivity(), storyList);
-                            storyRv.setAdapter(storyAdapter);
 
                             if (storyList.size()>0){
-                                storyRv.setVisibility(View.VISIBLE);
+                                contentHomeNsv.setVisibility(View.VISIBLE);
                                 homePb.setVisibility(View.GONE);
                             }
                         }
+                        Collections.shuffle(storyList);
+                        storyAdapter = new StoryAdapter(getActivity(), storyList);
+                        storyRv.setAdapter(storyAdapter);
                     }
 
                     @Override
@@ -216,7 +249,7 @@ public class HomeFragment extends Fragment {
                             storyRv.setAdapter(storyAdapter);
 
                             if (storyList.size()>0){
-                                storyRv.setVisibility(View.VISIBLE);
+                                contentHomeNsv.setVisibility(View.VISIBLE);
                                 homePb.setVisibility(View.GONE);
                             }
                         }
@@ -239,15 +272,15 @@ public class HomeFragment extends Fragment {
                         for (DataSnapshot ds: dataSnapshot.getChildren()){
                             StoryData storyData = ds.getValue(StoryData.class);
                             storyList.add(storyData);
-                            Collections.reverse(storyList);
-                            storyAdapter = new StoryAdapter(getActivity(), storyList);
-                            storyRv.setAdapter(storyAdapter);
 
                             if (storyList.size()>0){
-                                storyRv.setVisibility(View.VISIBLE);
+                                contentHomeNsv.setVisibility(View.VISIBLE);
                                 homePb.setVisibility(View.GONE);
                             }
                         }
+                        Collections.reverse(storyList);
+                        storyAdapter = new StoryAdapter(getActivity(), storyList);
+                        storyRv.setAdapter(storyAdapter);
                     }
 
                     @Override
@@ -261,7 +294,7 @@ public class HomeFragment extends Fragment {
         }else {
 
             homePb.setVisibility(View.GONE);
-            storyRv.setVisibility(View.GONE);
+            contentHomeNsv.setVisibility(View.GONE);
             retryLl.setVisibility(View.VISIBLE);
         }
     }
@@ -331,14 +364,4 @@ public class HomeFragment extends Fragment {
         return true;
     }
 
-    private void checkUserStatus() {
-
-        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = firebaseAuth.getCurrentUser();
-
-        if (user == null){
-            startActivity(new Intent(getActivity(), MainActivity.class));
-            getActivity().finish();
-        }
-    }
 }

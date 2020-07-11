@@ -38,8 +38,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         mAuth = FirebaseAuth.getInstance();
-        Configuration configuration = new Configuration();
-        setLocale(configuration);
+//        Configuration configuration = new Configuration();
+//        setLocale(configuration);
 
         checkUserStatus();
     }
@@ -109,32 +109,32 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    public void applyOverrideConfiguration(Configuration overrideConfiguration) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1){
-            setLocale(overrideConfiguration);
-            applyOverrideConfiguration(overrideConfiguration);
-        }
-    }
-
-    public void setLocale(Configuration config) {
-
-        SharedPreferences languagePreference = getSharedPreferences(SettingsActivity.LANGUAGE_PREF, Context.MODE_PRIVATE);
-        String lang =  languagePreference.getString(SettingsActivity.LANGUAGE_KEY, SettingsActivity.ENGLISH);
-        String language;
-        if (lang.equals(SettingsActivity.SINHALA)){
-            language = SettingsActivity.SINHALA;
-        }else {
-            language = SettingsActivity.ENGLISH;
-        }
-
-        Locale locale = new Locale(language);
-        Locale.setDefault(locale);
-        if (Build.VERSION.SDK_INT>=17){
-            config.setLocale(locale);
-        } else {
-            config.locale = locale;
-        }
-        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
-    }
+//    @Override
+//    public void applyOverrideConfiguration(Configuration overrideConfiguration) {
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP && Build.VERSION.SDK_INT <= Build.VERSION_CODES.N_MR1){
+//            setLocale(overrideConfiguration);
+//            applyOverrideConfiguration(overrideConfiguration);
+//        }
+//    }
+//
+//    public void setLocale(Configuration config) {
+//
+//        SharedPreferences languagePreference = getSharedPreferences(SettingsActivity.LANGUAGE_PREF, Context.MODE_PRIVATE);
+//        String lang =  languagePreference.getString(SettingsActivity.LANGUAGE_KEY, SettingsActivity.ENGLISH);
+//        String language;
+//        if (lang.equals(SettingsActivity.SINHALA)){
+//            language = SettingsActivity.SINHALA;
+//        }else {
+//            language = SettingsActivity.ENGLISH;
+//        }
+//
+//        Locale locale = new Locale(language);
+//        Locale.setDefault(locale);
+//        if (Build.VERSION.SDK_INT>=17){
+//            config.setLocale(locale);
+//        } else {
+//            config.locale = locale;
+//        }
+//        getBaseContext().getResources().updateConfiguration(config, getBaseContext().getResources().getDisplayMetrics());
+//    }
 }

@@ -36,7 +36,7 @@
                 android:id="@+id/authorNameTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="20sp"
+                android:textSize="18sp"
                 android:padding="5dp"
                 android:textColor="@color/primaryTextColor"/>
 
@@ -46,7 +46,9 @@
                 android:layout_height="wrap_content"
                 android:textSize="16sp"
                 android:padding="5dp"
-                android:textColor="@color/primaryTextColor"/>
+                android:textColor="@color/primaryTextColor"
+                android:ellipsize="end"
+                android:maxLines="1"/>
 
         </LinearLayout>
 

@@ -14,6 +14,7 @@ import android.net.NetworkInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
@@ -26,30 +27,23 @@ import com.alakamandawalk.popcorn.download.DownloadsActivity;
 import com.alakamandawalk.popcorn.download.DownloadsFragment;
 import com.alakamandawalk.popcorn.home.HomeFragment;
 import com.alakamandawalk.popcorn.message.MessagesFragment;
-import com.google.android.gms.ads.AdRequest;
-import com.google.android.gms.ads.AdSize;
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
-import com.google.android.gms.ads.initialization.InitializationStatus;
-import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Locale;
 
 public class DashboardActivity extends AppCompatActivity {
 
     FirebaseAuth firebaseAuth;
-    FirebaseUser firebaseUser;
 
     ImageButton searchIb;
     public static ImageButton menuIb;
     public static TextView titleTv;
-    AdView mAdView;
 
     FrameLayout frameLayout;
     BottomNavigationView bottomNav;
+
+    String from;
 
     boolean doubleBackPressedToExitPressedOnce = false;
 
@@ -59,7 +53,7 @@ public class DashboardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_dashboard);
 
         Intent intent = getIntent();
-        String from = intent.getStringExtra("from");
+        from = intent.getStringExtra("from");
 
         firebaseAuth = FirebaseAuth.getInstance();
         Configuration configuration = new Configuration();
@@ -81,24 +75,40 @@ public class DashboardActivity extends AppCompatActivity {
             }
         });
 
-        MobileAds.initialize(this, "ca-app-pub-4079566491683275~2327287115");
-
-        AdView adView = new AdView(this);
-        adView.setAdSize(AdSize.BANNER);
-        adView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
-
-        MobileAds.initialize(this, new OnInitializationCompleteListener() {
-            @Override
-            public void onInitializationComplete(InitializationStatus initializationStatus) {
-            }
-        });
-        mAdView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
-
-        checkUserStatus();
         checkNetworkStatus(from);
         checkNightModeActivated();
+    }
+
+    private void loadHome(){
+        titleTv.setText(getString(R.string.home));
+        HomeFragment homeFragment = new HomeFragment();
+        FragmentTransaction ft1 = getSupportFragmentManager().beginTransaction();
+        ft1.replace(R.id.frameLayout, homeFragment, "");
+        ft1.commit();
+    }
+
+    private void loadMessages(){
+        titleTv.setText(getString(R.string.messages));
+        MessagesFragment messagesFragment = new MessagesFragment();
+        FragmentTransaction ft2 = getSupportFragmentManager().beginTransaction();
+        ft2.replace(R.id.frameLayout, messagesFragment, "");
+        ft2.commit();
+    }
+
+    private void loadAuthors(){
+        titleTv.setText(getString(R.string.authors));
+        AuthorsFragment authorsFragment = new AuthorsFragment();
+        FragmentTransaction ft3 = getSupportFragmentManager().beginTransaction();
+        ft3.replace(R.id.frameLayout, authorsFragment, "");
+        ft3.commit();
+    }
+
+    private void loadDownloads(){
+        titleTv.setText(getString(R.string.downloads));
+        DownloadsFragment downloadsFragment = new DownloadsFragment();
+        FragmentTransaction ft4 = getSupportFragmentManager().beginTransaction();
+        ft4.replace(R.id.frameLayout, downloadsFragment, "");
+        ft4.commit();
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener selectedListener =
@@ -110,38 +120,22 @@ public class DashboardActivity extends AppCompatActivity {
 
                         case R.id.nav_home:
 
-                            titleTv.setText(getString(R.string.home));
-                            HomeFragment homeFragment = new HomeFragment();
-                            FragmentTransaction ft1 = getSupportFragmentManager().beginTransaction();
-                            ft1.replace(R.id.frameLayout, homeFragment, "");
-                            ft1.commit();
+                            loadHome();
                             return true;
 
                         case R.id.nav_messages:
 
-                            titleTv.setText(getString(R.string.messages));
-                            MessagesFragment messagesFragment = new MessagesFragment();
-                            FragmentTransaction ft2 = getSupportFragmentManager().beginTransaction();
-                            ft2.replace(R.id.frameLayout, messagesFragment, "");
-                            ft2.commit();
+                            loadMessages();
                             return true;
 
                         case R.id.nav_authors:
 
-                            titleTv.setText(getString(R.string.authors));
-                            AuthorsFragment authorsFragment = new AuthorsFragment();
-                            FragmentTransaction ft3 = getSupportFragmentManager().beginTransaction();
-                            ft3.replace(R.id.frameLayout, authorsFragment, "");
-                            ft3.commit();
+                            loadAuthors();
                             return true;
 
                         case R.id.nav_downloads:
 
-                            titleTv.setText(getString(R.string.downloads));
-                            DownloadsFragment downloadsFragment = new DownloadsFragment();
-                            FragmentTransaction ft4 = getSupportFragmentManager().beginTransaction();
-                            ft4.replace(R.id.frameLayout, downloadsFragment, "");
-                            ft4.commit();
+                            loadDownloads();
                             return true;
                     }
 
@@ -156,11 +150,7 @@ public class DashboardActivity extends AppCompatActivity {
         if ( conMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED
                 || conMgr.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED ) {
 
-            titleTv.setText(getString(R.string.home));
-            HomeFragment homeFragment = new HomeFragment();
-            FragmentTransaction ft1 = getSupportFragmentManager().beginTransaction();
-            ft1.replace(R.id.frameLayout, homeFragment, "");
-            ft1.commit();
+            loadHome();
 
         }
         else if ( conMgr.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.DISCONNECTED
@@ -168,11 +158,7 @@ public class DashboardActivity extends AppCompatActivity {
 
             if (from != null){
 
-                titleTv.setText(getString(R.string.home));
-                HomeFragment homeFragment = new HomeFragment();
-                FragmentTransaction ft1 = getSupportFragmentManager().beginTransaction();
-                ft1.replace(R.id.frameLayout, homeFragment, "");
-                ft1.commit();
+                loadHome();
 
             }else {
                 Intent intent = new Intent(DashboardActivity.this, DownloadsActivity.class);
@@ -225,10 +211,39 @@ public class DashboardActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        super.onResume();
         checkNightModeActivated();
         Configuration configuration = new Configuration();
         setLocale(configuration);
+        refreshAndArrange();
+        super.onResume();
+    }
+
+    private int getSelectedItemId(BottomNavigationView bottomNav){
+        Menu menu = bottomNav.getMenu();
+        for (int i=0; i<bottomNav.getMenu().size(); i++){
+            MenuItem menuItem = menu.getItem(i);
+            if (menuItem.isChecked()){
+                return menuItem.getItemId();
+            }
+        }
+        return 0;
+    }
+
+    private void refreshAndArrange(){
+
+        switch (getSelectedItemId(bottomNav)){
+            case R.id.nav_home:
+                break;
+            case R.id.nav_messages:
+                loadMessages();
+                break;
+            case R.id.nav_authors:
+                loadAuthors();
+                break;
+            case R.id.nav_downloads:
+                loadDownloads();
+                break;
+        }
     }
 
     @Override
@@ -240,6 +255,21 @@ public class DashboardActivity extends AppCompatActivity {
         this.doubleBackPressedToExitPressedOnce = true;
         Toast.makeText(this, "press BACK again to EXIT", Toast.LENGTH_SHORT).show();
 
+        switch (getSelectedItemId(bottomNav)){
+            case R.id.nav_home:
+                loadHome();
+                break;
+            case R.id.nav_messages:
+                loadMessages();
+                break;
+            case R.id.nav_authors:
+                loadAuthors();
+                break;
+            case R.id.nav_downloads:
+                loadDownloads();
+                break;
+        }
+
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
@@ -248,12 +278,4 @@ public class DashboardActivity extends AppCompatActivity {
         }, 2000);
     }
 
-    private void checkUserStatus() {
-
-        firebaseUser = firebaseAuth.getCurrentUser();
-        if (firebaseUser == null){
-            startActivity(new Intent(DashboardActivity.this, MainActivity.class));
-            finish();
-        }
-    }
 }

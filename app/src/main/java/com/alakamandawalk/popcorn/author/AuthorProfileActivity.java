@@ -28,16 +28,12 @@ import com.alakamandawalk.popcorn.R;
 import com.alakamandawalk.popcorn.SettingsActivity;
 import com.alakamandawalk.popcorn.model.StoryData;
 import com.alakamandawalk.popcorn.story.StoryAdapter;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -215,7 +211,7 @@ public class AuthorProfileActivity extends AppCompatActivity {
                     storyDataList.add(storyData);
                     storyAdapter = new StoryAdapter(AuthorProfileActivity.this, storyDataList);
                     authorStoryRv.setAdapter(storyAdapter);
-                    storyCountTv.setText(storyDataList.size() + " STORIES");
+                    storyCountTv.setText(storyDataList.size() + " " + getResources().getString(R.string.stories));
                 }
             }
 

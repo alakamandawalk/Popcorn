@@ -34,7 +34,29 @@
     <string name="newest_first">newest first</string>
     <string name="oldest_first">oldest first</string>
     <string name="shuffle">shuffle</string>
-    <string name="changeLanguage">change language</string>
+    <string name="not_connected">Can\'t connect at the moment\nplease check the\nCONNECTION\nand try again</string>
+    <string name="changeLanguage">change language (Beta)</string>
+    <string name="retry">retry</string>
+    <string name="you_are_offline">you are offline\nread downloaded stories</string>
+    <string name="connect_to_the_internet">to see the latest updates\nturn on your mobile data\nor wifi and</string>
+    <string name="notice">To read the story</string>
+    <string name="rewarded_msg">this is a premium story you must watch the video before reading...</string>
+    <string name="left">Left</string>
+    <string name="watch_video">watch video</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="nativead_ad_unit_id" translatable="false">ca-app-pub-4079566491683275/7062508973</string>
+    <string name="feedback">Feedback</string>
+    <string name="app_suggestions">App suggestions (send as email)</string>
+    <string name="rate_us">Rate Us</string>
+    <string name="contact">Contacts</string>
+    <string name="contact_am">Contact developer</string>
+    <string name="contact_mp">Contact meedum paaru</string>
+    <string name="like_mp">Like meedum paaru</string>
+    <string name="about">About</string>
+    <string name="app_v">App version</string>
+    <string name="help">Helps and guide</string>
+    <string name="privacy_policy">Privacy policy</string>
+    <string name="delete_downloads">Delete downloaded stories</string>
+    <string name="delete_all_downloads">Delete all downloaded stories</string>
+    <string name="deleting">Deleting...</string>
 </resources>

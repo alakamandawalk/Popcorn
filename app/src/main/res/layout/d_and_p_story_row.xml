@@ -35,10 +35,12 @@
                 android:id="@+id/storyNameTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
+                android:textSize="18sp"
                 android:padding="5dp"
                 android:lineSpacingExtra="10dp"
-                android:textColor="@color/primaryTextColor"/>
+                android:textColor="@color/primaryTextColor"
+                android:ellipsize="end"
+                android:maxLines="1"/>
 
             <TextView
                 android:id="@+id/storyDateTv"

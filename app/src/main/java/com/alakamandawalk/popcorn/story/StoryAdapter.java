@@ -6,7 +6,6 @@ import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -55,10 +54,15 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
         String storyName = storyDataList.get(position).getStoryName();
         String timeStamp = storyDataList.get(position).getStoryDate();
         String authorId = storyDataList.get(position).getAuthorId();
+        final String isPremium = storyDataList.get(position).getIsPremium();
 
         Calendar calendar = Calendar.getInstance(Locale.getDefault());
         calendar.setTimeInMillis(Long.parseLong(timeStamp));
         String storyDate = DateFormat.format("dd/MM/yyyy", calendar).toString();
+
+        if (isPremium.equals("NO")){
+            holder.premiumIcon.setVisibility(View.GONE);
+        }
 
         try {
             Picasso.get()
@@ -72,8 +76,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
         }
 
         holder.storyNameTv.setText(storyName);
-        holder.storyDateTv.setText(storyDate);
-        setAuthorName(authorId, holder);
+        getAuthor(authorId, storyDate, holder);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -92,7 +95,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
         return storyDataList.size();
     }
 
-    private void setAuthorName(String authorId, final StoryViewHolder holder) {
+    private void getAuthor(String authorId, final String date, final StoryViewHolder holder) {
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("author");
         Query query = reference.orderByChild("authorId").equalTo(authorId);
@@ -102,7 +105,8 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
 
                 for (DataSnapshot ds: dataSnapshot.getChildren()){
 
-                    holder.authorNameTv.setText(ds.child("authorName").getValue().toString());
+                    String authorName = ds.child("authorName").getValue().toString();
+                    holder.authorNameAndDateTv.setText(date+" . "+authorName);
                 }
             }
 
@@ -116,17 +120,17 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
     public static class StoryViewHolder extends RecyclerView.ViewHolder{
 
         public CardView storyCv;
-        public ImageView storyImageIv;
-        public TextView storyNameTv, storyDateTv, authorNameTv;
+        public ImageView storyImageIv, premiumIcon;
+        public TextView storyNameTv, authorNameAndDateTv;
 
         public StoryViewHolder(@NonNull View itemView) {
             super(itemView);
 
             storyCv = itemView.findViewById(R.id.storyCv);
+            premiumIcon = itemView.findViewById(R.id.premiumIcon);
             storyImageIv = itemView.findViewById(R.id.storyImageIv);
             storyNameTv = itemView.findViewById(R.id.storyNameTv);
-            storyDateTv = itemView.findViewById(R.id.storyDateTv);
-            authorNameTv = itemView.findViewById(R.id.authorNameTv);
+            authorNameAndDateTv = itemView.findViewById(R.id.authorNameAndDateTv);
         }
     }
 }

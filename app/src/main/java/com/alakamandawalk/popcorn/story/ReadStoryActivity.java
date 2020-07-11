@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -25,8 +26,10 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.text.format.DateFormat;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -43,6 +46,11 @@ import com.google.android.gms.ads.AdListener;
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.InterstitialAd;
 import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.initialization.InitializationStatus;
+import com.google.android.gms.ads.initialization.OnInitializationCompleteListener;
+import com.google.android.gms.ads.reward.RewardItem;
+import com.google.android.gms.ads.reward.RewardedVideoAd;
+import com.google.android.gms.ads.reward.RewardedVideoAdListener;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -60,21 +68,23 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-public class ReadStoryActivity extends AppCompatActivity {
+public class ReadStoryActivity extends AppCompatActivity implements RewardedVideoAdListener{
 
+    NestedScrollView contentRSNsv;
+    Button retryBtn;
+    LinearLayout retryLl;
     ImageButton authorIb, downloadIb, playListIb, relatedStoriesIb;
-    TextView titleTv, storyTv, dateTv, authorNameTv, downloadBtnTipTv, counterTv;
+    TextView titleTv, storyTv, dateTv, authorNameTv, downloadBtnTipTv, readingTimeTv;
     ImageView storyImg;
     RelativeLayout showRelRl;
-    ProgressBar relStoryPb;
+    ProgressBar relStoryPb, readStoryPb;
     RecyclerView relatedStoryRv;
 
-    private boolean isDownloaded = false;
     private boolean showRel = false;
 
     DBHelper localDb;
 
-    String storyId, storyName, story, storyImage, storyDate, storyCategoryId, storyPlaylistId, storySearchTag;
+    String storyId, storyName, story, storyImage, storyDate, storyCategoryId, storyPlaylistId, storySearchTag, isPremium;
     String authorId, authorName;
 
     int readingTime;
@@ -87,8 +97,11 @@ public class ReadStoryActivity extends AppCompatActivity {
     List<StoryData> relStoryList;
 
     boolean doubleBackPressedToExitPressedOnce;
+    boolean isRewarded = false;
 
     private InterstitialAd mInterstitialAd;
+
+    private RewardedVideoAd mRewardedVideoAd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,10 +114,64 @@ public class ReadStoryActivity extends AppCompatActivity {
         Intent intent = getIntent();
         storyId = intent.getStringExtra("storyId");
 
+        initViews();
+        initButtons();
+
         localDb = new DBHelper(this);
 
-        pd = new ProgressDialog(this);
+        MobileAds.initialize(getApplicationContext(), "ca-app-pub-4079566491683275~2327287115");
 
+        mInterstitialAd = new InterstitialAd(this);
+        mInterstitialAd.setAdUnitId("ca-app-pub-4079566491683275/5969413997");
+
+        mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(this);
+        mRewardedVideoAd.setRewardedVideoAdListener(this);
+
+        if (!isOnDownloads()){
+            loadRewardedVideoAd();
+        }
+
+        LinearLayoutManager relStoriesLm = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
+        relStoriesLm.setStackFromEnd(true);
+        relatedStoryRv.setLayoutManager(relStoriesLm);
+
+        relStoryList = new ArrayList<>();
+        showRel = false;
+
+        interstitialAdListener();
+
+        if (isOnDownloads()){
+
+            downloadIb.setImageResource(R.drawable.ic_delete);
+            downloadBtnTipTv.setText(getString(R.string.remove));
+
+        }else {
+
+            downloadIb.setImageResource(R.drawable.ic_download);
+            downloadBtnTipTv.setText(getString(R.string.download));
+        }
+
+        loadStory();
+        showRelStories();
+        checkNightModeActivated();
+    }
+
+    private void loadStory() {
+
+        if (isOnDownloads()){
+            loadStoryOffline();
+        }else {
+            loadStoryOnline();
+        }
+    }
+
+    private void initViews() {
+
+        pd = new ProgressDialog(this);
+        contentRSNsv = findViewById(R.id.contentRSNsv);
+        retryLl = findViewById(R.id.retryLl);
+        retryBtn = findViewById(R.id.retryBtn);
+        readStoryPb = findViewById(R.id.readStoryPb);
         relatedStoryRv = findViewById(R.id.relatedStoryRv);
         relStoryPb = findViewById(R.id.relStoryPb);
         showRelRl = findViewById(R.id.showRelRl);
@@ -113,34 +180,38 @@ public class ReadStoryActivity extends AppCompatActivity {
         relatedStoriesIb = findViewById(R.id.relatedStoriesIb);
         downloadIb = findViewById(R.id.downloadIb);
         titleTv = findViewById(R.id.titleTv);
-        counterTv = findViewById(R.id.counterTv);
+        readingTimeTv = findViewById(R.id.readingTimeTv);
         storyTv = findViewById(R.id.storyTv);
         storyImg = findViewById(R.id.storyImg);
         dateTv = findViewById(R.id.dateTv);
         authorNameTv = findViewById(R.id.authorNameTv);
         downloadBtnTipTv = findViewById(R.id.downloadBtnTipTv);
+    }
 
-        MobileAds.initialize(this, "ca-app-pub-4079566491683275~2327287115");
-        mInterstitialAd = new InterstitialAd(ReadStoryActivity.this);
-        mInterstitialAd.setAdUnitId("ca-app-pub-3940256099942544/1033173712");
+    private void initButtons() {
 
-        LinearLayoutManager relStoriesLm =
-                new LinearLayoutManager(this,
-                        LinearLayoutManager.HORIZONTAL,
-                        true);
-        relStoriesLm.setStackFromEnd(true);
-        relatedStoryRv.setLayoutManager(relStoriesLm);
+        relatedStoriesIb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-        relStoryList = new ArrayList<>();
-        showRel = false;
-        showRelStories(storyCategoryId);
-
-        isOnDownloads(storyId);
+                if (checkNetworkStatus()){
+                    if (showRel){
+                        showRel=false;
+                        showRelStories();
+                    }else {
+                        showRel=true;
+                        showRelStories();
+                    }
+                }else {
+                    Toast.makeText(ReadStoryActivity.this, "no internet!", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
 
         downloadIb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                downloadOrRemove(storyId);
+                downloadOrRemove();
             }
         });
 
@@ -168,31 +239,15 @@ public class ReadStoryActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
-
-        relatedStoriesIb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                if (checkNetworkStatus()){
-                    if (showRel){
-                        showRel=false;
-                        showRelStories(storyCategoryId);
-                    }else {
-                        showRel=true;
-                        showRelStories(storyCategoryId);
-                    }
-                }else {
-                    Toast.makeText(ReadStoryActivity.this, "no internet!", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
-
-        checkNightModeActivated();
-
-        initAds();
     }
 
-    private void initAds() {
+    private void loadRewardedVideoAd() {
+        if (!mRewardedVideoAd.isLoaded()){
+            mRewardedVideoAd.loadAd("ca-app-pub-4079566491683275/5929460511", new AdRequest.Builder().build());
+        }
+    }
+
+    private void interstitialAdListener() {
 
         mInterstitialAd.setAdListener(new AdListener() {
             @Override
@@ -225,6 +280,7 @@ public class ReadStoryActivity extends AppCompatActivity {
                 ReadStoryActivity.super.onBackPressed();
             }
         });
+
     }
 
     private void countTimeToShowAds() {
@@ -248,30 +304,28 @@ public class ReadStoryActivity extends AppCompatActivity {
         }.start();
     }
 
-    private void isOnDownloads(String id) {
+    private boolean isOnDownloads() {
 
-        Cursor cursor = localDb.getStory(id);
+        boolean isDownloaded;
+        Cursor cursor = localDb.getStory(storyId);
         cursor.moveToFirst();
 
         if (cursor.getCount()>0){
 
             isDownloaded = true;
-            downloadIb.setImageResource(R.drawable.ic_delete);
-            downloadBtnTipTv.setText(getString(R.string.remove));
-            loadStoryOffline(id);
 
         }else {
             isDownloaded=false;
-            downloadIb.setImageResource(R.drawable.ic_download);
-            downloadBtnTipTv.setText(getString(R.string.download));
-            loadStoryOnline(id);
         }
-
+        return isDownloaded;
     }
 
-    private void loadStoryOffline(String id) {
+    private void loadStoryOffline() {
 
-        Cursor cursor = localDb.getStory(id);
+        readStoryPb.setVisibility(View.GONE);
+        retryLl.setVisibility(View.GONE);
+
+        Cursor cursor = localDb.getStory(storyId);
         cursor.moveToFirst();
 
         storyName = cursor.getString(cursor.getColumnIndex(LocalDBContract.LocalDBEntry.KEY_NAME));
@@ -301,91 +355,109 @@ public class ReadStoryActivity extends AppCompatActivity {
 
         countTimeToShowAds();
 
-        counterTv.setText(Math.round(readingTime/60)+" min reading");
+        readingTimeTv.setText(Math.round(readingTime/60)+" min reading");
         titleTv.setText(storyName);
         storyTv.setText(story);
         dateTv.setText(storyDate);
         authorNameTv.setText(authorName);
     }
 
-    private void loadStoryOnline(String id) {
+    private void showStory(){
 
-        pd.setMessage("Loading...");
-        pd.show();
-        pd.setCanceledOnTouchOutside(false);
+        try {
+            Transformation transformation = new Transformation() {
+                @Override
+                public Bitmap transform(Bitmap source) {
 
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference("story");
-        Query query = ref.orderByChild("storyId").equalTo(id);
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    int  targetWidth = storyImg.getWidth();
 
-                for (DataSnapshot ds: dataSnapshot.getChildren()){
-
-                    storyName = ds.child("storyName").getValue().toString();
-                    story = ds.child("story").getValue().toString();
-                    storyImage = ds.child("storyImage").getValue().toString();
-                    storyCategoryId = ds.child("storyCategoryId").getValue().toString();
-                    storyPlaylistId = ds.child("storyPlaylistId").getValue().toString();
-                    storySearchTag = ds.child("storySearchTag").getValue().toString();
-                    String timeStamp  = ds.child("storyDate").getValue().toString();
-                    authorId = ds.child("authorId").getValue().toString();
-
-                    java.util.Calendar calendar = Calendar.getInstance(Locale.getDefault());
-                    calendar.setTimeInMillis(Long.parseLong(timeStamp));
-                    storyDate = DateFormat.format("dd/MM/yyyy", calendar).toString();
-
-                    Transformation transformation = new Transformation() {
-                        @Override
-                        public Bitmap transform(Bitmap source) {
-
-                            int  targetWidth = storyImg.getWidth();
-
-                            double aspectRatio = (double) source.getHeight() / (double) source.getWidth();
-                            int targetHeight = (int) (targetWidth * aspectRatio);
-                            Bitmap result = Bitmap.createScaledBitmap(source, targetWidth, targetHeight,false);
-                            if (result != source){
-                                source.recycle();
-                            }
-                            return result;
-                        }
-
-                        @Override
-                        public String key() {
-                            return "transformation" + "desireWidth";
-                        }
-                    };
-
-                    try {
-                        Picasso.get()
-                                .load(storyImage)
-                                .transform(transformation)
-                                .placeholder(R.drawable.img_place_holder)
-                                .into(storyImg);
-                    }catch (Exception e){
-                        Picasso.get().load(R.drawable.img_place_holder).into(storyImg);
+                    double aspectRatio = (double) source.getHeight() / (double) source.getWidth();
+                    int targetHeight = (int) (targetWidth * aspectRatio);
+                    Bitmap result = Bitmap.createScaledBitmap(source, targetWidth, targetHeight,false);
+                    if (result != source){
+                        source.recycle();
                     }
-
-                    int wordCount = countWords(story);
-                    readingTime = (wordCount/2);
-
-                    countTimeToShowAds();
-
-                    counterTv.setText(Math.round(readingTime/60)+" min reading");
-                    titleTv.setText(storyName);
-                    storyTv.setText(story);
-                    dateTv.setText(storyDate);
-                    getAuthorDetails();
+                    return result;
                 }
-                pd.dismiss();
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                pd.dismiss();
-                Toast.makeText(ReadStoryActivity.this, ""+databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
+                @Override
+                public String key() {
+                    return "transformation" + "desireWidth";
+                }
+            };
+
+            Picasso.get()
+                    .load(storyImage)
+                    .transform(transformation)
+                    .placeholder(R.drawable.img_place_holder)
+                    .into(storyImg);
+        }catch (Exception e){
+            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
+        int wordCount = countWords(story);
+        readingTime = (wordCount/2);
+
+        countTimeToShowAds();
+
+        readingTimeTv.setText(Math.round(readingTime/60)+" min reading");
+        titleTv.setText(storyName);
+        storyTv.setText(story);
+        dateTv.setText(storyDate);
+        getAuthorDetails();
+    }
+
+    private void loadStoryOnline() {
+
+        contentRSNsv.setVisibility(View.GONE);
+        readStoryPb.setVisibility(View.VISIBLE);
+        retryLl.setVisibility(View.GONE);
+
+        if (checkNetworkStatus()){
+
+            DatabaseReference ref = FirebaseDatabase.getInstance().getReference("story");
+            Query query = ref.orderByChild("storyId").equalTo(storyId);
+            query.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+                    for (DataSnapshot ds: dataSnapshot.getChildren()){
+
+                        storyName = ds.child("storyName").getValue().toString();
+                        story = ds.child("story").getValue().toString();
+                        storyImage = ds.child("storyImage").getValue().toString();
+                        storyCategoryId = ds.child("storyCategoryId").getValue().toString();
+                        storyPlaylistId = ds.child("storyPlaylistId").getValue().toString();
+                        storySearchTag = ds.child("storySearchTag").getValue().toString();
+                        String timeStamp  = ds.child("storyDate").getValue().toString();
+                        authorId = ds.child("authorId").getValue().toString();
+                        isPremium = ds.child("isPremium").getValue().toString();
+
+                        java.util.Calendar calendar = Calendar.getInstance(Locale.getDefault());
+                        calendar.setTimeInMillis(Long.parseLong(timeStamp));
+                        storyDate = DateFormat.format("dd/MM/yyyy", calendar).toString();
+
+                        if (isPremium.equals("NO")){
+                            contentRSNsv.setVisibility(View.VISIBLE);
+                            readStoryPb.setVisibility(View.GONE);
+                            showStory();
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    readStoryPb.setVisibility(View.GONE);
+                    Toast.makeText(ReadStoryActivity.this, ""+databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+                }
+            });
+
+        }else {
+
+            readStoryPb.setVisibility(View.GONE);
+            contentRSNsv.setVisibility(View.GONE);
+            retryLl.setVisibility(View.VISIBLE);
+        }
     }
 
     private int countWords(String story){
@@ -406,7 +478,7 @@ public class ReadStoryActivity extends AppCompatActivity {
         return count;
     }
 
-    private void showRelStories(String categoryId) {
+    private void showRelStories() {
 
         if (showRel){
             relatedStoryRv.setVisibility(View.GONE);
@@ -414,7 +486,7 @@ public class ReadStoryActivity extends AppCompatActivity {
             relStoryPb.setVisibility(View.VISIBLE);
 
             DatabaseReference relRef = FirebaseDatabase.getInstance().getReference("story");
-            Query query = relRef.orderByChild("storyCategoryId").equalTo(categoryId);
+            Query query = relRef.orderByChild("storyCategoryId").equalTo(storyCategoryId);
             query.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -445,9 +517,9 @@ public class ReadStoryActivity extends AppCompatActivity {
         }
     }
 
-    private void downloadOrRemove(final String id) {
+    private void downloadOrRemove() {
 
-        if (isDownloaded){
+        if (isOnDownloads()){
 
             pd.setMessage(getString(R.string.removing));
 
@@ -461,9 +533,10 @@ public class ReadStoryActivity extends AppCompatActivity {
                     pd.show();
                     pd.setCanceledOnTouchOutside(false);
 
-                    localDb.deleteStory(id);
+                    localDb.deleteStory(storyId);
                     Toast.makeText(ReadStoryActivity.this, "Removed!", Toast.LENGTH_SHORT).show();
-                    isOnDownloads(id);
+                    downloadIb.setImageResource(R.drawable.ic_download);
+                    downloadBtnTipTv.setText(getString(R.string.download));
                     pd.dismiss();
                 }
             });
@@ -488,10 +561,11 @@ public class ReadStoryActivity extends AppCompatActivity {
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
             final byte[] data = baos.toByteArray();
 
-            localDb.insertStory(id, storyName, story, storyDate, storyCategoryId, storyPlaylistId, storySearchTag,authorId, authorName, data);
+            localDb.insertStory(storyId, storyName, story, storyDate, storyCategoryId, storyPlaylistId, storySearchTag,authorId, authorName, data);
 
             Toast.makeText(ReadStoryActivity.this, "Downloaded!", Toast.LENGTH_SHORT).show();
-            isOnDownloads(id);
+            downloadIb.setImageResource(R.drawable.ic_delete);
+            downloadBtnTipTv.setText(getString(R.string.remove));
             pd.dismiss();
         }
     }
@@ -582,7 +656,8 @@ public class ReadStoryActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         showRel=false;
-        showRelStories(storyCategoryId);
+        showRelStories();
+        mRewardedVideoAd.resume(this);
         super.onResume();
     }
 
@@ -613,4 +688,91 @@ public class ReadStoryActivity extends AppCompatActivity {
         }, 2000);
     }
 
+    @Override
+    public void onRewardedVideoAdLoaded() {
+
+        if (isPremium.equals("YES")){
+            if (mRewardedVideoAd.isLoaded()) {
+                mRewardedVideoAd.show();
+            }
+        }
+        Toast.makeText(this, "onRewardedVideoAdLoaded", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onRewardedVideoAdOpened() {
+        Toast.makeText(this, "onRewardedVideoAdOpened", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onRewardedVideoStarted() {
+        Toast.makeText(this, "onRewardedVideoAdStarted", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onRewardedVideoAdClosed() {
+
+        if (!isRewarded){
+            Toast.makeText(this, "onRewardedVideoAdClosed", Toast.LENGTH_SHORT).show();
+            MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this, R.style.AlertDialogTheme);
+            builder.setTitle(getResources().getString(R.string.notice));
+            builder.setMessage(getResources().getString(R.string.rewarded_msg));
+            builder.setPositiveButton(getResources().getString(R.string.watch_video), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+
+                    mRewardedVideoAd.resume();
+                }
+            });
+            builder.setNegativeButton(getResources().getString(R.string.left), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    finish();
+                }
+            });
+
+            AlertDialog dialog = builder.create();
+            dialog.show();
+        }
+    }
+
+    @Override
+    public void onRewarded(RewardItem rewardItem) {
+        isRewarded=true;
+        contentRSNsv.setVisibility(View.VISIBLE);
+        readStoryPb.setVisibility(View.GONE);
+        Toast.makeText(this, "Access Allowed", Toast.LENGTH_SHORT).show();
+        showStory();
+    }
+
+    @Override
+    public void onRewardedVideoAdLeftApplication() {
+        Toast.makeText(this, "onRewardedVideoAdLeftApplication",
+                Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onRewardedVideoAdFailedToLoad(int i) {
+        Toast.makeText(this, "onRewardedVideoAdFailedToLoad", Toast.LENGTH_SHORT).show();
+        if (isPremium.equals("YES")){
+            finish();
+        }
+    }
+
+    @Override
+    public void onRewardedVideoCompleted() {
+        Toast.makeText(this, "onRewardedVideoCompleted", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void onPause() {
+        mRewardedVideoAd.pause(this);
+        super.onPause();
+    }
+
+    @Override
+    public void onDestroy() {
+        mRewardedVideoAd.destroy(this);
+        super.onDestroy();
+    }
 }

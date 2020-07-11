@@ -63,7 +63,8 @@
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical">
+        android:scrollbars="vertical"
+        android:layout_marginTop="10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -79,7 +80,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="you are offline\nread downloaded stories"
+                android:text="@string/you_are_offline"
                 android:textSize="18sp"
                 android:layout_gravity="center_horizontal"
                 android:textAlignment="center"/>
@@ -94,7 +95,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="to see the latest updates\nturn on your mobile data\nor wifi and"
+                android:text="@string/connect_to_the_internet"
                 android:textSize="18sp"
                 android:layout_gravity="center_horizontal"
                 android:textAlignment="center"/>
@@ -104,7 +105,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:text="retry"
+                android:text="@string/retry"
                 android:textSize="20sp"
                 android:textColor="@color/secondaryColor"
                 android:padding="10sp"

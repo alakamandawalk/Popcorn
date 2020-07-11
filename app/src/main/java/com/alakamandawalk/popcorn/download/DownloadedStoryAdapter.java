@@ -59,15 +59,7 @@ public class DownloadedStoryAdapter extends RecyclerView.Adapter<DownloadedStory
             holder.storyImg.setImageResource(R.drawable.img_place_holder);
         }
 
-
-        if (storyName.length()>27){
-
-            holder.storyNameTv.setText(storyName.substring(0,25)+"...");
-
-        }else {
-
-            holder.storyNameTv.setText(storyName);
-        }
+        holder.storyNameTv.setText(storyName);
 
         holder.storyDateTv.setText(storyDate);
 

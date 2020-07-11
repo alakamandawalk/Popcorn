@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".download.DownloadsFragment"
-    android:background="@color/primaryBgColor">
+    android:background="@color/primaryBgColor"
+    android:id="@+id/downloadsFr">
 
     <RelativeLayout
         android:layout_width="match_parent"

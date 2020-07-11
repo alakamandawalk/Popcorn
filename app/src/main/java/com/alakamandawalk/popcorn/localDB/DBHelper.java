@@ -100,6 +100,13 @@ public class DBHelper extends SQLiteOpenHelper {
                 new String[] { id });
     }
 
+    public void deleteAll(){
+
+        SQLiteDatabase database = this.getWritableDatabase();
+        database.execSQL("DELETE FROM " + LocalDBEntry.TABLE_NAME);
+
+    }
+
     public Cursor getAllStories(){
         SQLiteDatabase database = this.getReadableDatabase();
         return database.query(
