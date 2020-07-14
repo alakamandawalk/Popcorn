@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.alakamandawalk.popcorn.R;
 import com.alakamandawalk.popcorn.SettingsActivity;
 import com.alakamandawalk.popcorn.model.StoryData;
+import com.alakamandawalk.popcorn.story.SmallStoryAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -50,7 +51,7 @@ public class PlaylistActivity extends AppCompatActivity {
     NestedScrollView contentPlaylistNsv;
     Button retryBtn;
 
-    PlaylistAdapter playlistAdapter;
+    SmallStoryAdapter smallStoryAdapter;
     List<StoryData> storyDataList;
 
     String playlistImage;
@@ -165,8 +166,8 @@ public class PlaylistActivity extends AppCompatActivity {
                     StoryData storyData = ds.getValue(StoryData.class);
 
                     storyDataList.add(storyData);
-                    playlistAdapter = new PlaylistAdapter(PlaylistActivity.this, storyDataList);
-                    playlistStoryRv.setAdapter(playlistAdapter);
+                    smallStoryAdapter = new SmallStoryAdapter(PlaylistActivity.this, storyDataList);
+                    playlistStoryRv.setAdapter(smallStoryAdapter);
                 }
             }
 

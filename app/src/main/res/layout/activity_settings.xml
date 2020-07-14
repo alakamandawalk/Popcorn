@@ -148,7 +148,8 @@
                         android:text="@string/changeLanguage"
                         android:textSize="18sp"
                         android:padding="10dp"
-                        android:textColor="@color/primaryTextColor"/>
+                        android:textColor="@color/primaryTextColor"
+                        android:onClick="changeLang"/>
 
                 </LinearLayout>
 
@@ -190,6 +191,62 @@
                         android:padding="10dp"
                         android:textColor="@color/primaryTextColor"
                         android:onClick="deleteDownloads"/>
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="7dp"
+                app:cardElevation="3dp"
+                app:cardBackgroundColor="@color/primaryColor"
+                app:cardCornerRadius="4dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/font_size"
+                        android:textSize="22sp"
+                        android:padding="10dp"
+                        android:textColor="@color/primaryTextColor"/>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:background="@color/primaryTextColor"
+                        android:layout_marginHorizontal="10dp"/>
+
+                    <TextView
+                        android:id="@+id/currentFontSize"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="18sp"
+                        android:padding="10dp"
+                        android:textColor="@color/primaryTextColor"
+                        android:onClick="deleteDownloads"/>
+
+                    <SeekBar
+                        android:id="@+id/textSizeSb"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"/>
+
+                    <TextView
+                        android:id="@+id/setToDefault"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/set_to_default"
+                        android:textSize="18sp"
+                        android:padding="10dp"
+                        android:textColor="@color/primaryTextColor"
+                        android:onClick="setDefaultTextSize"/>
 
                 </LinearLayout>
 
@@ -359,7 +416,8 @@
                         android:text="@string/privacy_policy"
                         android:textSize="18sp"
                         android:padding="10dp"
-                        android:textColor="@color/primaryTextColor"/>
+                        android:textColor="@color/primaryTextColor"
+                        android:onClick="goToPrivacyPolicy"/>
 
                 </LinearLayout>
 

@@ -7,43 +7,6 @@
     tools:context=".story.ReadStoryActivity"
     android:background="@color/primaryBgColor">
 
-    <ProgressBar
-        android:id="@+id/readStoryPb"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_centerInParent="true"/>
-
-    <LinearLayout
-        android:id="@+id/retryLl"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_centerInParent="true">
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/cant_connect"
-            android:textAlignment="center"
-            android:layout_gravity="center_horizontal"
-            android:textColor="@color/primaryTextColor"
-            android:padding="10dp"
-            android:textSize="18sp"/>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/retryBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            style="@style/Widget.MaterialComponents.Button.TextButton"
-            android:text="@string/retry"
-            android:textSize="20sp"
-            android:textColor="@color/secondaryColor"
-            android:padding="10sp"
-            android:layout_gravity="center_horizontal"/>
-
-    </LinearLayout>
-
     <androidx.core.widget.NestedScrollView
         android:id="@+id/contentRSNsv"
         android:layout_width="match_parent"
@@ -112,14 +75,31 @@
                         android:orientation="vertical"
                         android:layout_margin="5dp">
 
-                        <TextView
-                            android:id="@+id/titleTv"
+                        <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:textColor="@color/primaryTextColor"
-                            android:textSize="22sp"
-                            android:textStyle="bold"
-                            android:padding="5dp"/>
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/titleTv"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:textColor="@color/primaryTextColor"
+                                android:textSize="22sp"
+                                android:textStyle="bold"
+                                android:padding="5dp"/>
+
+                            <ImageView
+                                android:id="@+id/premiumIcon"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:src="@drawable/ic_premium"
+                                android:tint="@color/gold"
+                                android:padding="10dp"
+                                android:layout_gravity="top"/>
+
+                        </LinearLayout>
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -321,5 +301,54 @@
         </LinearLayout>
 
     </androidx.core.widget.NestedScrollView>
+
+    <ImageButton
+        android:id="@+id/backIb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_back_arrow"
+        android:padding="10dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/round_trnc_bg"
+        android:tint="@color/primaryTextColor"
+        android:layout_margin="10dp"/>
+
+    <ProgressBar
+        android:id="@+id/readStoryPb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_centerInParent="true"/>
+
+    <LinearLayout
+        android:id="@+id/retryLl"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerInParent="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/not_connected"
+            android:textAlignment="center"
+            android:layout_gravity="center_horizontal"
+            android:textColor="@color/primaryTextColor"
+            android:padding="10dp"
+            android:textSize="18sp"/>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/retryBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:text="@string/retry"
+            android:textSize="20sp"
+            android:textColor="@color/secondaryColor"
+            android:padding="10sp"
+            android:layout_gravity="center_horizontal"/>
+
+    </LinearLayout>
 
 </RelativeLayout>

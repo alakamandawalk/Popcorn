@@ -16,13 +16,31 @@
         android:src="@drawable/popcorn_logo"
         android:layout_marginHorizontal="100dp"/>
 
-    <ImageView
-        android:id="@+id/copyrightsLogoImg"
-        android:layout_width="wrap_content"
-        android:layout_height="25dp"
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
         android:layout_centerHorizontal="true"
-        android:layout_alignParentBottom="true"
-        android:src="@drawable/alakamandawa_gray"
-        android:layout_margin="20dp"/>
+        android:layout_alignParentBottom="true">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/retryBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:text="@string/retry"
+            android:textSize="20sp"
+            android:textColor="@color/secondaryColor"
+            android:padding="10sp"
+            android:layout_gravity="center_horizontal"/>
+
+        <ImageView
+            android:id="@+id/copyrightsLogoImg"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:src="@drawable/alakamandawa_gray"
+            android:layout_margin="20dp"/>
+
+    </LinearLayout>
 
 </RelativeLayout>

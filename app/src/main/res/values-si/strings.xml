@@ -38,7 +38,7 @@
     <string name="oldest_first">පැරණි කථා පළමුව</string>
     <string name="shuffle">කළවම් කර බලන්න</string>
     <string name="changeLanguage">භාශාව වෙනස් කරන්න (Beta)</string>
-    <string name="not_connected">මේ මොහොතේ සම්බන්ධ වීමට නොහැක\nකරුණාකර සම්බන්ධතාව පරික්ෂාකර\nනැවත උත්සාහ කරන්න</string>
+    <string name="not_connected">මේ මොහොතේ සම්බන්ධ වීමට නොහැක"\n"කරුණාකර සම්බන්ධතාව පරික්ෂාකර</string>
     <string name="retry">නැවත උත්සාහ කරන්න</string>
     <string name="you_are_offline">ඔබ අන්තර්ජාලය හා සම්බන්ධ වී නොමැත\nබා ගත් කතා කියවන්න</string>
     <string name="connect_to_the_internet">නවතම කතා කියවීම සඳහා\nමොබයිල් ඩේටා\nහෝ වයිෆයි සක්‍රීය කර</string>
@@ -60,4 +60,11 @@
     <string name="delete_downloads">Delete downloaded storise</string>
     <string name="delete_all_downloads">Delete all downloaded stories</string>
     <string name="deleting">Deleting...</string>
+    <string name="minute">මිනිත්තු</string>
+    <string name="no_connection">NO CONNECTION</string>
+    <string name="signin_msg">To load the daa you need to connect your device to the internet. please turn on your mobile data or wifi..!</string>
+    <string name="ok">OK</string>
+    <string name="font_size">Font size</string>
+    <string name="set_to_default">set to default</string>
+    <string name="text_size">Text size</string>
 </resources>

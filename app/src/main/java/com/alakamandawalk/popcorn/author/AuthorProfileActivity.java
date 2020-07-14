@@ -26,7 +26,9 @@ import android.widget.Toast;
 
 import com.alakamandawalk.popcorn.R;
 import com.alakamandawalk.popcorn.SettingsActivity;
+import com.alakamandawalk.popcorn.download.DownloadedStoryAdapter;
 import com.alakamandawalk.popcorn.model.StoryData;
+import com.alakamandawalk.popcorn.story.SmallStoryAdapter;
 import com.alakamandawalk.popcorn.story.StoryAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -54,7 +56,7 @@ public class AuthorProfileActivity extends AppCompatActivity {
 
     String authorCoverImage, authorProfileImage;
 
-    StoryAdapter storyAdapter;
+    SmallStoryAdapter storyAdapter;
     List<StoryData> storyDataList;
 
     @Override
@@ -209,7 +211,7 @@ public class AuthorProfileActivity extends AppCompatActivity {
                     StoryData storyData = ds.getValue(StoryData.class);
 
                     storyDataList.add(storyData);
-                    storyAdapter = new StoryAdapter(AuthorProfileActivity.this, storyDataList);
+                    storyAdapter = new SmallStoryAdapter(AuthorProfileActivity.this, storyDataList);
                     authorStoryRv.setAdapter(storyAdapter);
                     storyCountTv.setText(storyDataList.size() + " " + getResources().getString(R.string.stories));
                 }

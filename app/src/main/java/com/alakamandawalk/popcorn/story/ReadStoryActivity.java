@@ -8,6 +8,7 @@ import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -25,13 +26,16 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.text.format.DateFormat;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,17 +72,22 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import static com.alakamandawalk.popcorn.SettingsActivity.KEY_TEXT_SIZE;
+import static com.alakamandawalk.popcorn.SettingsActivity.TEXT_SIZE_PREFERENCE;
+
 public class ReadStoryActivity extends AppCompatActivity implements RewardedVideoAdListener{
 
     NestedScrollView contentRSNsv;
     Button retryBtn;
     LinearLayout retryLl;
-    ImageButton authorIb, downloadIb, playListIb, relatedStoriesIb;
+    ImageButton authorIb, downloadIb, playListIb, relatedStoriesIb, backIb;
     TextView titleTv, storyTv, dateTv, authorNameTv, downloadBtnTipTv, readingTimeTv;
-    ImageView storyImg;
+    ImageView storyImg, premiumIcon;
     RelativeLayout showRelRl;
     ProgressBar relStoryPb, readStoryPb;
     RecyclerView relatedStoryRv;
+    SeekBar textSizeSb;
+    TextView fontSizeTv;
 
     private boolean showRel = false;
 
@@ -90,6 +99,8 @@ public class ReadStoryActivity extends AppCompatActivity implements RewardedVide
     int readingTime;
     boolean showAds = false;
     int counter;
+
+    int textSize;
 
     ProgressDialog pd;
 
@@ -153,6 +164,7 @@ public class ReadStoryActivity extends AppCompatActivity implements RewardedVide
 
         loadStory();
         showRelStories();
+        changeTextSize();
         checkNightModeActivated();
     }
 
@@ -186,6 +198,8 @@ public class ReadStoryActivity extends AppCompatActivity implements RewardedVide
         dateTv = findViewById(R.id.dateTv);
         authorNameTv = findViewById(R.id.authorNameTv);
         downloadBtnTipTv = findViewById(R.id.downloadBtnTipTv);
+        backIb = findViewById(R.id.backIb);
+        premiumIcon = findViewById(R.id.premiumIcon);
     }
 
     private void initButtons() {
@@ -239,7 +253,80 @@ public class ReadStoryActivity extends AppCompatActivity implements RewardedVide
                 startActivity(intent);
             }
         });
+
+        backIb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
+        storyTv.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                createChangeTSDialog();
+                return false;
+            }
+        });
     }
+
+    SeekBar.OnSeekBarChangeListener seekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
+        @Override
+        public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+            fontSizeTv.setText(getResources().getString(R.string.font_size)+" "+progress);
+            saveTextSize(progress);
+            changeTextSize();
+        }
+
+        @Override
+        public void onStartTrackingTouch(SeekBar seekBar) {
+
+        }
+
+        @Override
+        public void onStopTrackingTouch(SeekBar seekBar) {
+
+        }
+    };
+
+    private void createChangeTSDialog() {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        LinearLayout layout = new LinearLayout(this);
+        layout.setOrientation(LinearLayout.VERTICAL);
+        textSizeSb = new SeekBar(this);
+        textSizeSb.setPadding(20,20,20,20);
+        textSizeSb.setMax(40);
+        textSizeSb.setProgress(textSize);
+        fontSizeTv = new TextView(this);
+        fontSizeTv.setTextSize((float) 22.0);
+        fontSizeTv.setText(getResources().getString(R.string.font_size)+" "+textSize);
+        fontSizeTv.setPadding(10,10,10,10);
+        TextView setDefTv = new TextView(this);
+        setDefTv.setTextSize((float) 22.0);
+        setDefTv.setText(getResources().getString(R.string.set_to_default));
+        setDefTv.setPadding(10,10,10,10);
+        layout.addView(fontSizeTv);
+        layout.addView(textSizeSb);
+        layout.addView(setDefTv);
+        builder.setView(layout);
+        textSizeSb.setOnSeekBarChangeListener(seekBarChangeListener);
+        setDefTv.setOnClickListener(onSetToDefClickListener);
+        builder.create().show();
+    }
+
+    View.OnClickListener onSetToDefClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            SharedPreferences textSizePreference = getSharedPreferences(TEXT_SIZE_PREFERENCE, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = textSizePreference.edit();
+            editor.putInt(KEY_TEXT_SIZE, 18);
+            editor.apply();
+            textSizeSb.setProgress(18);
+            fontSizeTv.setText(getResources().getString(R.string.font_size)+" "+18);
+            changeTextSize();
+        }
+    };
 
     private void loadRewardedVideoAd() {
         if (!mRewardedVideoAd.isLoaded()){
@@ -324,6 +411,7 @@ public class ReadStoryActivity extends AppCompatActivity implements RewardedVide
 
         readStoryPb.setVisibility(View.GONE);
         retryLl.setVisibility(View.GONE);
+        premiumIcon.setVisibility(View.GONE);
 
         Cursor cursor = localDb.getStory(storyId);
         cursor.moveToFirst();
@@ -351,11 +439,11 @@ public class ReadStoryActivity extends AppCompatActivity implements RewardedVide
         }
 
         int wordCount = countWords(story);
-        readingTime = (wordCount/2);
+        readingTime = (wordCount/3);
 
         countTimeToShowAds();
 
-        readingTimeTv.setText(Math.round(readingTime/60)+" min reading");
+        readingTimeTv.setText(Math.round((readingTime/60)+1)+" "+getResources().getString(R.string.minute));
         titleTv.setText(storyName);
         storyTv.setText(story);
         dateTv.setText(storyDate);
@@ -395,12 +483,16 @@ public class ReadStoryActivity extends AppCompatActivity implements RewardedVide
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
 
+        if (isPremium.equals("NO")){
+            premiumIcon.setVisibility(View.GONE);
+        }
+
         int wordCount = countWords(story);
-        readingTime = (wordCount/2);
+        readingTime = (wordCount/3);
 
         countTimeToShowAds();
 
-        readingTimeTv.setText(Math.round(readingTime/60)+" min reading");
+        readingTimeTv.setText(Math.round((readingTime/60)+1)+" "+getResources().getString(R.string.minute));
         titleTv.setText(storyName);
         storyTv.setText(story);
         dateTv.setText(storyDate);
@@ -612,6 +704,22 @@ public class ReadStoryActivity extends AppCompatActivity implements RewardedVide
         return conStatus;
     }
 
+    private void saveTextSize(int progress) {
+
+        SharedPreferences textSizePreference = getSharedPreferences(TEXT_SIZE_PREFERENCE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = textSizePreference.edit();
+        editor.putInt(KEY_TEXT_SIZE, progress);
+        editor.apply();
+    }
+
+    private void changeTextSize() {
+
+        SharedPreferences textSizePreference = getSharedPreferences(TEXT_SIZE_PREFERENCE, Context.MODE_PRIVATE);
+        textSize = textSizePreference.getInt(KEY_TEXT_SIZE, 22);
+        float tf = Integer.valueOf(textSize).floatValue();
+        storyTv.setTextSize(tf);
+    }
+
     private void checkNightModeActivated(){
 
         SharedPreferences themePref = getSharedPreferences(SettingsActivity.THEME_PREFERENCE, MODE_PRIVATE);
@@ -678,7 +786,7 @@ public class ReadStoryActivity extends AppCompatActivity implements RewardedVide
             return;
         }
         this.doubleBackPressedToExitPressedOnce = true;
-        Toast.makeText(this, "press BACK again to EXIT", Toast.LENGTH_SHORT).show();
+        Toast.makeText(this, "press again to go BACK", Toast.LENGTH_SHORT).show();
 
         new Handler().postDelayed(new Runnable() {
             @Override

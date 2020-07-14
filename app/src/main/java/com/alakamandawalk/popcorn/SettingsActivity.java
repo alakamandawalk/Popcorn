@@ -1,5 +1,6 @@
 package com.alakamandawalk.popcorn;
 
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
@@ -16,6 +17,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.SeekBar;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,10 +31,14 @@ public class SettingsActivity extends AppCompatActivity {
 
     ImageButton backIb;
     Switch darkModeSw;
-    TextView changeLngTv;
+    TextView currentFontSize;
+    SeekBar textSizeSb;
 
     public static final String THEME_PREFERENCE = "nightModePref";
     public static final String KEY_IS_NIGHT_MODE = "isNightMode";
+
+    public static final String TEXT_SIZE_PREFERENCE = "textSizePref";
+    public static final String KEY_TEXT_SIZE = "textSize";
 
     public static final String ENGLISH = "en";
     public static final String SINHALA = "si";
@@ -52,19 +58,14 @@ public class SettingsActivity extends AppCompatActivity {
 
         backIb = findViewById(R.id.backIb);
         darkModeSw = findViewById(R.id.darkModeSw);
-        changeLngTv = findViewById(R.id.changeLngTv);
+        currentFontSize = findViewById(R.id.currentFontSize);
+        textSizeSb = findViewById(R.id.textSizeSb);
+        textSizeSb.setMax(40);
 
         backIb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
-            }
-        });
-
-        changeLngTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showLangDialog();
             }
         });
 
@@ -83,7 +84,44 @@ public class SettingsActivity extends AppCompatActivity {
             }
         });
 
+        textSizeSb.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                saveTextSize(progress);
+                changeTextSize();
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
         checkNightModeActivated();
+        changeTextSize();
+    }
+
+    private void changeTextSize() {
+
+        SharedPreferences textSizePreference = getSharedPreferences(TEXT_SIZE_PREFERENCE, Context.MODE_PRIVATE);
+        int textSize = textSizePreference.getInt(KEY_TEXT_SIZE, 18);
+        float tf = Integer.valueOf(textSize).floatValue();
+        currentFontSize.setText(getResources().getString(R.string.font_size)+" "+textSize);
+        currentFontSize.setTextSize(tf);
+        textSizeSb.setProgress(textSize);
+    }
+
+    private void saveTextSize(int progress) {
+
+        SharedPreferences textSizePreference = getSharedPreferences(TEXT_SIZE_PREFERENCE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = textSizePreference.edit();
+        editor.putInt(KEY_TEXT_SIZE, progress);
+        editor.apply();
     }
 
     private void saveNightModeState(boolean b) {
@@ -209,6 +247,9 @@ public class SettingsActivity extends AppCompatActivity {
 
             }
         });
+
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     public void appSugEmail(View view) {
@@ -271,5 +312,22 @@ public class SettingsActivity extends AppCompatActivity {
     public void likeMpFb(View view) {
         Intent faceBookIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.facebook.com/meedumpaaru"));
         startActivity(faceBookIntent);
+    }
+
+    public void goToPrivacyPolicy(View view) {
+        Intent privacyPolicyIntent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://alakamamdawalk.xyz/privacy-policy/"));
+        startActivity(privacyPolicyIntent);
+    }
+
+    public void setDefaultTextSize(View view) {
+        SharedPreferences textSizePreference = getSharedPreferences(TEXT_SIZE_PREFERENCE, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = textSizePreference.edit();
+        editor.putInt(KEY_TEXT_SIZE, 18);
+        editor.apply();
+        changeTextSize();
+    }
+
+    public void changeLang(View view) {
+        showLangDialog();
     }
 }

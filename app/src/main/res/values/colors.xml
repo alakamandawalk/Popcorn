@@ -25,4 +25,5 @@
     <color name="imgOverlay">#00000000</color>
     <color name="gold">#FFD700</color>
     <color name="readingTime">#8c9900</color>
+    <color name="trncBg">#66FFFFFF</color>
 </resources>

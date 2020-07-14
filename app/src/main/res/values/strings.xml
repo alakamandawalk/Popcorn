@@ -35,7 +35,7 @@
     <string name="oldest_first">oldest first</string>
     <string name="shuffle">shuffle</string>
     <string name="not_connected">Can\'t connect at the moment\nplease check the\nCONNECTION\nand try again</string>
-    <string name="changeLanguage">change language (Beta)</string>
+    <string name="changeLanguage">Change language (Beta)</string>
     <string name="retry">retry</string>
     <string name="you_are_offline">you are offline\nread downloaded stories</string>
     <string name="connect_to_the_internet">to see the latest updates\nturn on your mobile data\nor wifi and</string>
@@ -59,4 +59,11 @@
     <string name="delete_downloads">Delete downloaded stories</string>
     <string name="delete_all_downloads">Delete all downloaded stories</string>
     <string name="deleting">Deleting...</string>
+    <string name="minute">minutes</string>
+    <string name="no_connection">NO CONNECTION</string>
+    <string name="signin_msg">To load the daa you need to connect your device to the internet. please turn on your mobile data or wifi..!</string>
+    <string name="ok">OK</string>
+    <string name="font_size">Font size</string>
+    <string name="set_to_default">Set to default</string>
+    <string name="text_size">Text size</string>
 </resources>
