@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
@@ -31,7 +32,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     ImageButton backIb;
     Switch darkModeSw;
-    TextView currentFontSize;
+    TextView currentFontSize, currentVersionTv;
     SeekBar textSizeSb;
 
     public static final String THEME_PREFERENCE = "nightModePref";
@@ -59,6 +60,7 @@ public class SettingsActivity extends AppCompatActivity {
         backIb = findViewById(R.id.backIb);
         darkModeSw = findViewById(R.id.darkModeSw);
         currentFontSize = findViewById(R.id.currentFontSize);
+        currentVersionTv = findViewById(R.id.currentVersionTv);
         textSizeSb = findViewById(R.id.textSizeSb);
         textSizeSb.setMax(40);
 
@@ -104,6 +106,19 @@ public class SettingsActivity extends AppCompatActivity {
 
         checkNightModeActivated();
         changeTextSize();
+        showAppVersion();
+    }
+
+    private void showAppVersion() {
+
+        try {
+            PackageInfo packageInfo = SettingsActivity.this.getPackageManager().getPackageInfo(getPackageName(), 0);
+            String version = packageInfo.versionName;
+            currentVersionTv.setText(version);
+        }catch (Exception e){
+            Toast.makeText(this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
     }
 
     private void changeTextSize() {
@@ -230,7 +245,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(this, R.style.AlertDialogTheme);
         builder.setTitle(getResources().getString(R.string.delete_all_downloads));
-        builder.setMessage(getResources().getString(R.string.delete_message));
+        builder.setMessage(getResources().getString(R.string.delete_all_messages));
         builder.setPositiveButton(getResources().getString(R.string.delete), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
@@ -329,5 +344,12 @@ public class SettingsActivity extends AppCompatActivity {
 
     public void changeLang(View view) {
         showLangDialog();
+    }
+
+    public void appInfoDialog(View view) {
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(getLayoutInflater().inflate(R.layout.about_app_dialog, null ));
+        builder.show();
     }
 }

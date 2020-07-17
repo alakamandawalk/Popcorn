@@ -35,7 +35,7 @@
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
                         android:textColor="@color/primaryTextColor"
-                        android:textSize="20sp"
+                        android:textSize="@dimen/dimen_20sp"
                         android:layout_gravity="center_vertical"/>
 
                     <LinearLayout
@@ -50,7 +50,7 @@
                             android:src="@drawable/ic_search"
                             android:layout_gravity="center_vertical"
                             android:background="@null"
-                            android:padding="10dp"
+                            android:padding="@dimen/dimen_10dp"
                             android:tint="@color/primaryTextColor" />
 
                         <ImageButton
@@ -60,7 +60,7 @@
                             android:src="@drawable/ic_more"
                             android:layout_gravity="center_vertical"
                             android:background="@null"
-                            android:padding="10dp"
+                            android:padding="@dimen/dimen_10dp"
                             android:tint="@color/primaryTextColor"/>
 
                     </LinearLayout>
@@ -78,7 +78,7 @@
             android:animateLayoutChanges="true"
             app:layout_anchor="@id/appBarLayout"
             app:layout_anchorGravity="bottom"
-            android:layout_marginBottom="40dp">
+            android:layout_marginBottom="@dimen/dimen_40dp">
 
         </FrameLayout>
 
@@ -87,7 +87,7 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNav"
         android:layout_width="match_parent"
-        android:layout_height="40dp"
+        android:layout_height="@dimen/dimen_40dp"
         app:menu="@menu/main_nav_menu"
         app:labelVisibilityMode="unlabeled"
         app:itemBackground="@color/bottomNavBgColor"

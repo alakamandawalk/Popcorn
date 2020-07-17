@@ -5,10 +5,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:id="@+id/authorCv"
-    app:cardElevation="2dp"
-    app:cardCornerRadius="4dp"
-    android:layout_marginHorizontal="5dp"
-    android:layout_marginBottom="5dp"
+    app:cardElevation="@dimen/dimen_2dp"
+    app:cardCornerRadius="@dimen/dimen_4dp"
+    android:layout_marginHorizontal="@dimen/dimen_5dp"
+    android:layout_marginBottom="@dimen/dimen_5dp"
     android:background="@color/primaryColor"
     app:cardBackgroundColor="@color/primaryColor">
 
@@ -19,11 +19,11 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/authorProfileImg"
-            android:layout_width="80dp"
-            android:layout_height="80dp"
+            android:layout_width="@dimen/dimen_80dp"
+            android:layout_height="@dimen/dimen_80dp"
             android:src="@drawable/img_place_holder"
             android:scaleType="centerCrop"
-            android:layout_margin="10dp"
+            android:layout_margin="@dimen/dimen_10dp"
             app:civ_border_color="@color/primaryColor"/>
 
         <LinearLayout
@@ -36,16 +36,16 @@
                 android:id="@+id/authorNameTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="18sp"
-                android:padding="5dp"
+                android:textSize="@dimen/dimen_18sp"
+                android:padding="@dimen/dimen_5dp"
                 android:textColor="@color/primaryTextColor"/>
 
             <TextView
                 android:id="@+id/authorPostTv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="16sp"
-                android:padding="5dp"
+                android:textSize="@dimen/dimen_16sp"
+                android:padding="@dimen/dimen_5dp"
                 android:textColor="@color/primaryTextColor"
                 android:ellipsize="end"
                 android:maxLines="1"/>

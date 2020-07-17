@@ -45,7 +45,7 @@
                         android:src="@drawable/ic_back_arrow"
                         android:background="@null"
                         android:layout_gravity="center_vertical"
-                        android:padding="10dp"
+                        android:padding="@dimen/dimen_10dp"
                         android:tint="@color/white"
                         android:shadowColor="@color/black"
                         android:shadowDx="1"
@@ -57,7 +57,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:textSize="20sp"
+                        android:textSize="@dimen/dimen_20sp"
                         android:layout_gravity="center_vertical"
                         android:textColor="@color/white"
                         android:shadowColor="@color/black"
@@ -77,8 +77,8 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="10dp"
-        app:behavior_overlapTop="64dp"
+        android:padding="@dimen/dimen_10dp"
+        app:behavior_overlapTop="@dimen/dimen_64dp"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <ProgressBar
@@ -102,8 +102,8 @@
                 android:textAlignment="center"
                 android:layout_gravity="center_horizontal"
                 android:textColor="@color/primaryTextColor"
-                android:padding="10dp"
-                android:textSize="18sp"/>
+                android:padding="@dimen/dimen_10dp"
+                android:textSize="@dimen/dimen_18sp"/>
 
             <com.google.android.material.button.MaterialButton
                 android:id="@+id/retryBtn"
@@ -111,9 +111,9 @@
                 android:layout_height="wrap_content"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:text="@string/retry"
-                android:textSize="20sp"
+                android:textSize="@dimen/dimen_20sp"
                 android:textColor="@color/secondaryColor"
-                android:padding="10sp"
+                android:padding="@dimen/dimen_10dp"
                 android:layout_gravity="center_horizontal"/>
 
         </LinearLayout>

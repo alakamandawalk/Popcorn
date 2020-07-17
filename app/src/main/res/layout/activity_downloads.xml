@@ -32,7 +32,7 @@
                     android:src="@drawable/ic_back_arrow"
                     android:background="@null"
                     android:layout_gravity="center_vertical"
-                    android:padding="10dp"
+                    android:padding="@dimen/dimen_10dp"
                     android:tint="@color/primaryTextColor"/>
 
                 <TextView
@@ -40,7 +40,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:text="@string/downloads"
-                    android:textSize="20sp"
+                    android:textSize="@dimen/dimen_20sp"
                     android:layout_gravity="center_vertical"
                     android:textColor="@color/primaryTextColor"/>
 
@@ -51,7 +51,7 @@
                     android:src="@drawable/ic_more"
                     android:background="@null"
                     android:layout_gravity="center_vertical"
-                    android:padding="10dp"
+                    android:padding="@dimen/dimen_10dp"
                     android:tint="@color/primaryTextColor"/>
 
             </LinearLayout>
@@ -64,7 +64,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scrollbars="vertical"
-        android:layout_marginTop="10dp">
+        android:layout_marginTop="@dimen/dimen_10dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -81,7 +81,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/you_are_offline"
-                android:textSize="18sp"
+                android:textSize="@dimen/dimen_18sp"
                 android:layout_gravity="center_horizontal"
                 android:textAlignment="center"/>
 
@@ -89,14 +89,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:background="@color/primaryTextColor"
-                android:layout_marginVertical="10dp"
-                android:layout_marginHorizontal="50dp"/>
+                android:layout_marginVertical="@dimen/dimen_10dp"
+                android:layout_marginHorizontal="@dimen/dimen_50dp"/>
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/connect_to_the_internet"
-                android:textSize="18sp"
+                android:textSize="@dimen/dimen_18sp"
                 android:layout_gravity="center_horizontal"
                 android:textAlignment="center"/>
 
@@ -106,7 +106,7 @@
                 android:layout_height="wrap_content"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:text="@string/retry"
-                android:textSize="20sp"
+                android:textSize="@dimen/dimen_20sp"
                 android:textColor="@color/secondaryColor"
                 android:padding="10sp"
                 android:layout_gravity="center_horizontal"/>
@@ -115,7 +115,7 @@
                 android:id="@+id/downloadedStoryRv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"/>
+                android:layout_marginTop="@dimen/dimen_20dp"/>
 
         </LinearLayout>
 

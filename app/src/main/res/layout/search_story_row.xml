@@ -3,9 +3,9 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:textSize="22sp"
-    android:paddingVertical="15dp"
-    android:paddingHorizontal="10dp"
+    android:textSize="@dimen/dimen_22sp"
+    android:paddingVertical="@dimen/dimen_15dp"
+    android:paddingHorizontal="@dimen/dimen_10dp"
     android:id="@+id/searchStoryNameTv"
     android:textColor="@color/primaryTextColor">
 

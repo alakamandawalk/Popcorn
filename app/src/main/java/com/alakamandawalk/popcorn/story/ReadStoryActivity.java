@@ -138,10 +138,6 @@ public class ReadStoryActivity extends AppCompatActivity implements RewardedVide
         mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(this);
         mRewardedVideoAd.setRewardedVideoAdListener(this);
 
-        if (!isOnDownloads()){
-            loadRewardedVideoAd();
-        }
-
         LinearLayoutManager relStoriesLm = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, true);
         relStoriesLm.setStackFromEnd(true);
         relatedStoryRv.setLayoutManager(relStoriesLm);
@@ -453,32 +449,12 @@ public class ReadStoryActivity extends AppCompatActivity implements RewardedVide
     private void showStory(){
 
         try {
-            Transformation transformation = new Transformation() {
-                @Override
-                public Bitmap transform(Bitmap source) {
-
-                    int  targetWidth = storyImg.getWidth();
-
-                    double aspectRatio = (double) source.getHeight() / (double) source.getWidth();
-                    int targetHeight = (int) (targetWidth * aspectRatio);
-                    Bitmap result = Bitmap.createScaledBitmap(source, targetWidth, targetHeight,false);
-                    if (result != source){
-                        source.recycle();
-                    }
-                    return result;
-                }
-
-                @Override
-                public String key() {
-                    return "transformation" + "desireWidth";
-                }
-            };
 
             Picasso.get()
                     .load(storyImage)
-                    .transform(transformation)
                     .placeholder(R.drawable.img_place_holder)
                     .into(storyImg);
+
         }catch (Exception e){
             Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
         }
@@ -529,7 +505,10 @@ public class ReadStoryActivity extends AppCompatActivity implements RewardedVide
                         calendar.setTimeInMillis(Long.parseLong(timeStamp));
                         storyDate = DateFormat.format("dd/MM/yyyy", calendar).toString();
 
-                        if (isPremium.equals("NO")){
+                        if (isPremium.equals("YES")){
+                            loadRewardedVideoAd();
+                            Toast.makeText(ReadStoryActivity.this, "Loading Ads...", Toast.LENGTH_LONG).show();
+                        }else {
                             contentRSNsv.setVisibility(View.VISIBLE);
                             readStoryPb.setVisibility(View.GONE);
                             showStory();

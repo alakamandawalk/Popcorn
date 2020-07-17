@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.alakamandawalk.popcorn.R;
 import com.alakamandawalk.popcorn.SettingsActivity;
@@ -40,6 +41,7 @@ public class DownloadsFragment extends Fragment {
     RecyclerView downloadsRv;
     ProgressBar downloadPb;
     DownloadedStoryAdapter downloadedStoryAdapter;
+    TextView noDownloadsTv;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -89,6 +91,7 @@ public class DownloadsFragment extends Fragment {
 
         downloadsRv = view.findViewById(R.id.downloadsRv);
         downloadPb = view.findViewById(R.id.downloadPb);
+        noDownloadsTv = view.findViewById(R.id.noDownloadsTv);
 
         dbHelper = new DBHelper(getActivity());
 
@@ -115,13 +118,23 @@ public class DownloadsFragment extends Fragment {
 
         downloadsRv.setVisibility(View.GONE);
         downloadPb.setVisibility(View.VISIBLE);
+        noDownloadsTv.setVisibility(View.GONE);
 
-        downloadedStoryAdapter = new DownloadedStoryAdapter(getActivity(), dbHelper.getAllStories());
-        downloadsRv.setAdapter(downloadedStoryAdapter);
+        int storyCount = dbHelper.numberOfRows();
 
-        downloadsRv.setVisibility(View.VISIBLE);
-        downloadPb.setVisibility(View.GONE);
+        if (storyCount>=1){
 
+            downloadedStoryAdapter = new DownloadedStoryAdapter(getActivity(), dbHelper.getAllStories());
+            downloadsRv.setAdapter(downloadedStoryAdapter);
+
+            downloadsRv.setVisibility(View.VISIBLE);
+            downloadPb.setVisibility(View.GONE);
+
+        }else {
+            downloadsRv.setVisibility(View.GONE);
+            downloadPb.setVisibility(View.GONE);
+            noDownloadsTv.setVisibility(View.VISIBLE);
+        }
     }
 
     private void showPopupMenu(){

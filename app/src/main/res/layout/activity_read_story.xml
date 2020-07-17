@@ -22,7 +22,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="0dp"
-                app:cardElevation="2dp"
+                app:cardElevation="@dimen/dimen_2dp"
                 app:cardBackgroundColor="@color/primaryColor">
 
                 <LinearLayout
@@ -38,9 +38,8 @@
                             android:id="@+id/storyImg"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:scaleType="fitStart"
                             android:adjustViewBounds="true"
-                            android:src="@drawable/img_place_holder"
-                            android:scaleType="fitXY"
                             android:foreground="@color/imgOverlay"/>
 
                         <RelativeLayout
@@ -49,8 +48,7 @@
                             android:layout_height="match_parent"
                             android:background="@color/relatedListBgColor"
                             android:layout_alignParentBottom="true"
-                            android:paddingBottom="10dp"
-                            android:paddingTop="10dp">
+                            android:paddingVertical="@dimen/dimen_10dp">
 
                             <ProgressBar
                                 android:id="@+id/relStoryPb"
@@ -73,7 +71,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:layout_margin="5dp">
+                        android:layout_margin="@dimen/dimen_5dp">
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -86,9 +84,9 @@
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
                                 android:textColor="@color/primaryTextColor"
-                                android:textSize="22sp"
+                                android:textSize="@dimen/dimen_22sp"
                                 android:textStyle="bold"
-                                android:padding="5dp"/>
+                                android:padding="@dimen/dimen_5dp"/>
 
                             <ImageView
                                 android:id="@+id/premiumIcon"
@@ -96,7 +94,7 @@
                                 android:layout_height="wrap_content"
                                 android:src="@drawable/ic_premium"
                                 android:tint="@color/gold"
-                                android:padding="10dp"
+                                android:padding="@dimen/dimen_10dp"
                                 android:layout_gravity="top"/>
 
                         </LinearLayout>
@@ -111,16 +109,16 @@
                                 android:layout_width="0dp"
                                 android:layout_height="wrap_content"
                                 android:layout_weight="1"
-                                android:textSize="18sp"
+                                android:textSize="@dimen/dimen_18sp"
                                 android:textColor="@color/primaryTextColor"
-                                android:padding="5dp"/>
+                                android:padding="@dimen/dimen_5dp"/>
 
                             <TextView
                                 android:id="@+id/dateTv"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:textSize="15sp"
-                                android:padding="5dp"
+                                android:textSize="@dimen/dimen_16sp"
+                                android:padding="@dimen/dimen_5dp"
                                 android:textColor="@color/primaryTextColor"/>
 
                         </LinearLayout>
@@ -135,16 +133,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardBackgroundColor="@color/primaryColor"
-                app:cardElevation="2dp"
-                app:cardCornerRadius="4dp"
-                android:layout_marginHorizontal="5dp"
-                android:layout_marginTop="5dp">
+                app:cardElevation="@dimen/dimen_2dp"
+                app:cardCornerRadius="@dimen/dimen_4dp"
+                android:layout_marginHorizontal="@dimen/dimen_5dp"
+                android:layout_marginTop="@dimen/dimen_5dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="5dp">
+                    android:padding="@dimen/dimen_5dp">
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -161,7 +159,7 @@
                                 android:id="@+id/authorIb"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:padding="10dp"
+                                android:padding="@dimen/dimen_10dp"
                                 android:src="@drawable/ic_author"
                                 android:background="@null"
                                 android:layout_gravity="center_horizontal"
@@ -188,7 +186,7 @@
                                 android:layout_height="wrap_content"
                                 android:src="@drawable/ic_download"
                                 android:background="@null"
-                                android:padding="10dp"
+                                android:padding="@dimen/dimen_10dp"
                                 android:layout_gravity="center_horizontal"
                                 android:tint="@color/primaryTextColor"/>
 
@@ -214,7 +212,7 @@
                                 android:layout_height="wrap_content"
                                 android:src="@drawable/ic_playlist"
                                 android:background="@null"
-                                android:padding="10dp"
+                                android:padding="@dimen/dimen_10dp"
                                 android:layout_gravity="center_horizontal"
                                 android:tint="@color/primaryTextColor"/>
 
@@ -239,7 +237,7 @@
                                 android:layout_height="wrap_content"
                                 android:src="@drawable/ic_related"
                                 android:background="@null"
-                                android:padding="10dp"
+                                android:padding="@dimen/dimen_10dp"
                                 android:layout_gravity="center_horizontal"
                                 android:tint="@color/primaryTextColor"/>
 
@@ -261,10 +259,10 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:cardCornerRadius="4dp"
+                app:cardCornerRadius="@dimen/dimen_4dp"
                 app:cardBackgroundColor="@color/storyBgColor"
-                app:cardElevation="2dp"
-                android:layout_margin="5dp">
+                app:cardElevation="@dimen/dimen_2dp"
+                android:layout_margin="@dimen/dimen_5dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -275,24 +273,24 @@
                         android:id="@+id/readingTimeTv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="5dp"
-                        android:textSize="16sp"
+                        android:padding="@dimen/dimen_5dp"
+                        android:textSize="@dimen/dimen_16sp"
                         android:textColor="@color/readingTime"
-                        android:paddingVertical="10dp"
+                        android:paddingVertical="@dimen/dimen_10dp"
                         android:textAlignment="textEnd"/>
 
                     <TextView
                         android:id="@+id/storyTv"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:padding="5dp"
-                        android:textSize="22sp"
-                        android:lineSpacingExtra="15dp"
+                        android:padding="@dimen/dimen_5dp"
+                        android:textSize="@dimen/dimen_22sp"
+                        android:lineSpacingExtra="@dimen/dimen_15dp"
                         android:textColor="@color/storyTextColor"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="80dp"/>
+                        android:layout_height="@dimen/dimen_64dp"/>
 
                 </LinearLayout>
 
@@ -307,12 +305,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/ic_back_arrow"
-        android:padding="10dp"
+        android:padding="@dimen/dimen_10dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:background="@drawable/round_trnc_bg"
         android:tint="@color/primaryTextColor"
-        android:layout_margin="10dp"/>
+        android:layout_margin="@dimen/dimen_10dp"/>
 
     <ProgressBar
         android:id="@+id/readStoryPb"
@@ -335,8 +333,8 @@
             android:textAlignment="center"
             android:layout_gravity="center_horizontal"
             android:textColor="@color/primaryTextColor"
-            android:padding="10dp"
-            android:textSize="18sp"/>
+            android:padding="@dimen/dimen_10dp"
+            android:textSize="@dimen/dimen_18sp"/>
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/retryBtn"
@@ -344,9 +342,9 @@
             android:layout_height="wrap_content"
             style="@style/Widget.MaterialComponents.Button.TextButton"
             android:text="@string/retry"
-            android:textSize="20sp"
+            android:textSize="@dimen/dimen_20sp"
             android:textColor="@color/secondaryColor"
-            android:padding="10sp"
+            android:padding="@dimen/dimen_10dp"
             android:layout_gravity="center_horizontal"/>
 
     </LinearLayout>

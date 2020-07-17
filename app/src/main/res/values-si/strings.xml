@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">Popcorn</string>
-
+    <string name="app_name">Popcorn story collection</string>
 
     <string name="authors_action_bar_title">කතෲන්</string>
     <string name="author_profile_action_bar_title">කතෲගේ පැතිකඩ</string>
@@ -30,6 +29,7 @@
     <string name="removing">ඉවත් කරමින්…</string>
     <string name="delete">ඉවත් කරන්න</string>
     <string name="delete_message">ඔබට මෙම කථාව බාගත කිරීම් අතරින් ඉවත් කිරීමට අවශ්‍යමද?</string>
+    <string name="delete_all_messages">ඔබට සියලුම කතා බාගත කිරීම් අතරින් ඉවත් කිරීමට අවශ්‍යමද?</string>
     <string name="yes">ඔව්</string>
     <string name="no">නැත</string>
     <string name="language">භාශාව</string>
@@ -46,25 +46,28 @@
     <string name="notice">මෙම කතාව කියවීමට</string>
     <string name="watch_video">දැන්වීම නරඹන්න</string>
     <string name="left">ඉවත් වන්න</string>
-    <string name="feedback">Feedback</string>
-    <string name="app_suggestions">App suggestions (send as email)</string>
-    <string name="rate_us">Rate Us</string>
-    <string name="contact">Contacts</string>
-    <string name="contact_am">Contact developer</string>
-    <string name="contact_mp">Contact meedum paaru</string>
-    <string name="like_mp">Like meedum paaru</string>
-    <string name="about">About</string>
-    <string name="app_v">App version</string>
-    <string name="help">Helps and guide</string>
-    <string name="privacy_policy">Privacy policy</string>
-    <string name="delete_downloads">Delete downloaded storise</string>
-    <string name="delete_all_downloads">Delete all downloaded stories</string>
-    <string name="deleting">Deleting...</string>
+    <string name="feedback">ප්‍රතිචාර</string>
+    <string name="app_suggestions">ඔබගේ යෝජනා (ඊ-මේල් කරන්න)</string>
+    <string name="rate_us">අපිව අගය කරන්න</string>
+    <string name="contact">සම්බන්ධතා</string>
+    <string name="contact_am">නිශ්පාදකවරයා සම්බන්ධ කරගන්න</string>
+    <string name="contact_mp">මීදුම් පාරු ඇඩ්මින් සම්බන්ධ කරගන්න</string>
+    <string name="like_mp">මීදුම් පාරු ෆේස්බුක් පිටුවට ලයික් කරන්න</string>
+    <string name="about">අපි ගැන</string>
+    <string name="app_v">ඇප් අනුවාදය</string>
+    <string name="privacy_policy">රහස්‍යතා ප්‍රතිපත්ති ප්‍රකාශය</string>
+    <string name="delete_downloads">බාගත් කතා මකන්න</string>
+    <string name="delete_all_downloads">බාගත් සියලුම කතා මකන්න</string>
+    <string name="deleting">මකමින්...</string>
     <string name="minute">මිනිත්තු</string>
-    <string name="no_connection">NO CONNECTION</string>
-    <string name="signin_msg">To load the daa you need to connect your device to the internet. please turn on your mobile data or wifi..!</string>
-    <string name="ok">OK</string>
-    <string name="font_size">Font size</string>
-    <string name="set_to_default">set to default</string>
-    <string name="text_size">Text size</string>
+    <string name="no_connection">සම්බන්ධ වී නොමැත</string>
+    <string name="signin_msg">දත්ත පූරණය කිරීමට අන්තර්ජාල සම්බන්දතාවය අත්‍යවශ්‍ය බැවින්\nකරුණාකර මොබයිල් ඩේටා හෝ වෛෆෛ සක්‍රීය කරන්න...</string>
+    <string name="ok">හරි</string>
+    <string name="font_size">අක්ශරවල ප්‍රමාණය</string>
+    <string name="set_to_default">පෙර නිමියට සකසන්න</string>
+    <string name="text_size">අක්ශරවල ප්‍රමාණය</string>
+    <string name="Version">Version 2.0</string>
+    <string name="copy">© 2020 Alakamandawa Inc.</string>
+    <string name="app_info">ඇප් එක ගැන</string>
+    <string name="no_downloads_yet">බාගත් කිසිවක් නොමැත\nඔබ කතා බාගත් විට\nඒවා මෙතනින් බලාගත හැකි වේ</string>
 </resources>
