@@ -20,6 +20,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.alakamandawalk.popcorn.DashboardActivity;
@@ -38,6 +40,8 @@ public class DownloadsActivity extends AppCompatActivity {
 
     ImageButton backIb, menuIb;
     Button retryBtn;
+    ProgressBar downloadPb;
+    TextView noDownloadsTv;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +55,8 @@ public class DownloadsActivity extends AppCompatActivity {
         backIb = findViewById(R.id.backIb);
         menuIb = findViewById(R.id.menuIb);
         retryBtn = findViewById(R.id.retryBtn);
+        downloadPb = findViewById(R.id.downloadPb);
+        noDownloadsTv = findViewById(R.id.noDownloadsTv);
 
         dbHelper = new DBHelper(this);
 
@@ -111,8 +117,25 @@ public class DownloadsActivity extends AppCompatActivity {
 
     private void loadStories() {
 
-        downloadedStoryAdapter = new DownloadedStoryAdapter(this, dbHelper.getAllStories());
-        downloadedStoryRv.setAdapter(downloadedStoryAdapter);
+        downloadedStoryRv.setVisibility(View.GONE);
+        downloadPb.setVisibility(View.VISIBLE);
+        noDownloadsTv.setVisibility(View.GONE);
+
+        int storyCount = dbHelper.numberOfRows();
+
+        if (storyCount>=1){
+
+            downloadedStoryAdapter = new DownloadedStoryAdapter(this, dbHelper.getAllStories());
+            downloadedStoryRv.setAdapter(downloadedStoryAdapter);
+
+            downloadedStoryRv.setVisibility(View.VISIBLE);
+            downloadPb.setVisibility(View.GONE);
+
+        }else {
+            downloadedStoryRv.setVisibility(View.GONE);
+            downloadPb.setVisibility(View.GONE);
+            noDownloadsTv.setVisibility(View.VISIBLE);
+        }
 
     }
 
@@ -177,9 +200,9 @@ public class DownloadsActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        checkNightModeActivated();
         Configuration configuration = new Configuration();
         setLocale(configuration);
+        checkNightModeActivated();
         super.onResume();
     }
 
