@@ -448,16 +448,22 @@ public class ReadStoryActivity extends AppCompatActivity implements RewardedVide
 
     private void showStory(){
 
-        try {
+        if(storyPlaylistId.equals("no")){
+            try {
 
-            Picasso.get()
-                    .load(storyImage)
-                    .placeholder(R.drawable.img_place_holder)
-                    .into(storyImg);
+                Picasso.get()
+                        .load(storyImage)
+                        .placeholder(R.drawable.img_place_holder)
+                        .into(storyImg);
 
-        }catch (Exception e){
-            Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }catch (Exception e){
+                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        }else {
+            getImgFromPlaylist();
         }
+
+
 
         if (isPremium.equals("NO")){
             premiumIcon.setVisibility(View.GONE);
@@ -493,7 +499,6 @@ public class ReadStoryActivity extends AppCompatActivity implements RewardedVide
 
                         storyName = ds.child("storyName").getValue().toString();
                         story = ds.child("story").getValue().toString();
-                        storyImage = ds.child("storyImage").getValue().toString();
                         storyCategoryId = ds.child("storyCategoryId").getValue().toString();
                         storyPlaylistId = ds.child("storyPlaylistId").getValue().toString();
                         storySearchTag = ds.child("storySearchTag").getValue().toString();
@@ -504,6 +509,10 @@ public class ReadStoryActivity extends AppCompatActivity implements RewardedVide
                         java.util.Calendar calendar = Calendar.getInstance(Locale.getDefault());
                         calendar.setTimeInMillis(Long.parseLong(timeStamp));
                         storyDate = DateFormat.format("dd/MM/yyyy", calendar).toString();
+
+                        if (storyPlaylistId.equals("no")){
+                            storyImage = ds.child("storyImage").getValue().toString();
+                        }
 
                         if (isPremium.equals("YES")){
                             loadRewardedVideoAd();
@@ -529,6 +538,34 @@ public class ReadStoryActivity extends AppCompatActivity implements RewardedVide
             contentRSNsv.setVisibility(View.GONE);
             retryLl.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void getImgFromPlaylist() {
+
+        DatabaseReference imgRef = FirebaseDatabase.getInstance().getReference("playlist");
+        Query query = imgRef.orderByChild("playlistId").equalTo(storyPlaylistId);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot ds: snapshot.getChildren()){
+                    String imgUrl = ds.child("playlistImage").getValue().toString();
+                    try {
+                        Picasso.get()
+                                .load(imgUrl)
+                                .placeholder(R.drawable.img_place_holder)
+                                .into(storyImg);
+
+                    }catch (Exception e){
+                        Toast.makeText(ReadStoryActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(ReadStoryActivity.this, error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private int countWords(String story){

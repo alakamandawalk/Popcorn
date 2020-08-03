@@ -50,10 +50,10 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
     public void onBindViewHolder(@NonNull StoryViewHolder holder, int position) {
 
         final String storyId = storyDataList.get(position).getStoryId();
-        final String storyImage = storyDataList.get(position).getStoryImage();
         String storyName = storyDataList.get(position).getStoryName();
         String timeStamp = storyDataList.get(position).getStoryDate();
         String authorId = storyDataList.get(position).getAuthorId();
+        String playlistId = storyDataList.get(position).getStoryPlaylistId();
         final String isPremium = storyDataList.get(position).getIsPremium();
 
         Calendar calendar = Calendar.getInstance(Locale.getDefault());
@@ -64,15 +64,20 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
             holder.premiumIcon.setVisibility(View.GONE);
         }
 
-        try {
-            Picasso.get()
-                    .load(storyImage)
-                    .placeholder(R.drawable.img_place_holder)
-                    .fit()
-                    .centerCrop()
-                    .into(holder.storyImageIv);
-        }catch (Exception e){
-            Picasso.get().load(R.drawable.img_place_holder).into(holder.storyImageIv);
+        if (playlistId.equals("no")){
+            String storyImage = storyDataList.get(position).getStoryImage();
+            try {
+                Picasso.get()
+                        .load(storyImage)
+                        .placeholder(R.drawable.img_place_holder)
+                        .fit()
+                        .centerCrop()
+                        .into(holder.storyImageIv);
+            }catch (Exception e){
+                Picasso.get().load(R.drawable.img_place_holder).into(holder.storyImageIv);
+            }
+        }else {
+            getImgFromPlaylist(playlistId, holder);
         }
 
         holder.storyNameTv.setText(storyName);
@@ -93,6 +98,35 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
     @Override
     public int getItemCount() {
         return storyDataList.size();
+    }
+
+    private void getImgFromPlaylist(String playListId, final StoryAdapter.StoryViewHolder holder) {
+
+        DatabaseReference imgRef = FirebaseDatabase.getInstance().getReference("playlist");
+        Query query = imgRef.orderByChild("playlistId").equalTo(playListId);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot ds: snapshot.getChildren()){
+                    String storyImage = ds.child("playlistImage").getValue().toString();
+                    try {
+                        Picasso.get()
+                                .load(storyImage)
+                                .placeholder(R.drawable.img_place_holder)
+                                .fit()
+                                .centerCrop()
+                                .into(holder.storyImageIv);
+                    }catch (Exception e){
+                        Picasso.get().load(R.drawable.img_place_holder).into(holder.storyImageIv);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void getAuthor(String authorId, final String date, final StoryViewHolder holder) {

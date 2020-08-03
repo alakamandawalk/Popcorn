@@ -31,6 +31,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.alakamandawalk.popcorn.R;
+import com.alakamandawalk.popcorn.SearchActivity;
 import com.alakamandawalk.popcorn.SettingsActivity;
 import com.alakamandawalk.popcorn.model.StoryData;
 import com.alakamandawalk.popcorn.story.StoryAdapter;
@@ -315,7 +316,8 @@ public class HomeFragment extends Fragment {
 
         final PopupMenu popupMenu = new PopupMenu(getActivity(), menuIb, Gravity.END);
         popupMenu.getMenu().add(Menu.NONE, 0,0, getResources().getString(R.string.sort_by));
-        popupMenu.getMenu().add(Menu.NONE, 1,1,getResources().getString(R.string.settings));
+        popupMenu.getMenu().add(Menu.NONE, 1,1, getResources().getString(R.string.categories));
+        popupMenu.getMenu().add(Menu.NONE, 2,2,getResources().getString(R.string.settings));
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -327,6 +329,10 @@ public class HomeFragment extends Fragment {
                 }
 
                 if (id==1){
+                    startActivity(new Intent(getActivity(), SearchActivity.class));
+                }
+
+                if (id==2){
                     startActivity(new Intent(getActivity(), SettingsActivity.class));
                 }
 

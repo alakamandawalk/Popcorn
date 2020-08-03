@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -16,7 +16,9 @@
         <androidx.appcompat.widget.Toolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize">
+            android:layout_height="?attr/actionBarSize"
+            app:layout_scrollFlags="scroll|enterAlways"
+            app:popupTheme="@style/Theme.AppCompat.Light">
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -53,184 +55,23 @@
 
         </androidx.appcompat.widget.Toolbar>
 
+        <com.google.android.material.tabs.TabLayout
+            android:id="@+id/tabsLayout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:tabIndicatorColor="@color/secondaryDarkColor"
+            app:tabIndicatorHeight="@dimen/dimen_2dp"
+            app:tabMode="fixed"
+            app:tabGravity="fill"
+            app:tabTextColor="@color/primaryTextColor"
+            app:tabSelectedTextColor="@color/secondaryDarkColor"/>
+
     </com.google.android.material.appbar.AppBarLayout>
 
-    <RelativeLayout
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        app:layout_behavior="com.google.android.material.appbar.AppBarLayout$ScrollingViewBehavior"/>
 
-        <androidx.core.widget.NestedScrollView
-            android:id="@+id/contentAuthorNsv"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scrollbars="vertical">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardBackgroundColor="@color/primaryColor"
-                    app:cardCornerRadius="0dp"
-                    app:cardElevation="@dimen/dimen_2dp">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical">
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="@dimen/dimen_280dp">
-
-                            <ImageView
-                                android:id="@+id/authorCoverImg"
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/dimen_230dp"
-                                android:src="@drawable/img_place_holder"
-                                android:scaleType="centerCrop"
-                                android:foreground="@color/imgOverlay"/>
-
-                            <de.hdodenhof.circleimageview.CircleImageView
-                                android:id="@+id/authorProfileImg"
-                                android:layout_width="@dimen/dimen_100dp"
-                                android:layout_height="@dimen/dimen_100dp"
-                                android:layout_marginTop="@dimen/dimen_180dp"
-                                android:layout_marginLeft="@dimen/dimen_40dp"
-                                android:src="@drawable/img_place_holder"
-                                android:scaleType="centerCrop"
-                                app:civ_border_width="@dimen/dimen_5dp"
-                                app:civ_border_color="@color/authorProPicBorderColor"/>
-
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/dimen_50dp"
-                                android:layout_marginLeft="@dimen/dimen_140dp"
-                                android:layout_alignParentBottom="true">
-
-                                <TextView
-                                    android:id="@+id/storyCountTv"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:textSize="@dimen/dimen_16sp"
-                                    android:layout_centerVertical="true"
-                                    android:layout_alignParentRight="true"
-                                    android:layout_marginRight="@dimen/dimen_10dp"
-                                    android:textColor="@color/primaryTextColor"/>
-
-                            </RelativeLayout>
-
-                        </RelativeLayout>
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <TextView
-                                android:id="@+id/authorNameTv"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textSize="@dimen/dimen_20sp"
-                                android:padding="@dimen/dimen_5dp"
-                                android:textColor="@color/primaryTextColor"
-                                android:textStyle="bold"/>
-
-                            <TextView
-                                android:id="@+id/authorPostTv"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:textSize="@dimen/dimen_18sp"
-                                android:padding="@dimen/dimen_5dp"
-                                android:textColor="@color/primaryTextColor"/>
-
-                        </LinearLayout>
-
-                    </LinearLayout>
-
-                </androidx.cardview.widget.CardView>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dimen_1dp"
-                    android:background="@color/primaryTextColor"
-                    android:layout_marginVertical="@dimen/dimen_10dp"/>
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:cardCornerRadius="@dimen/dimen_4dp"
-                    app:cardElevation="@dimen/dimen_2dp"
-                    app:cardBackgroundColor="@color/primaryColor"
-                    android:layout_marginHorizontal="@dimen/dimen_5dp">
-
-                    <TextView
-                        android:id="@+id/authorDescriptionTv"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:textSize="@dimen/dimen_16sp"
-                        android:padding="@dimen/dimen_15dp"
-                        android:textStyle="italic"
-                        android:textColor="@color/primaryTextColor"
-                        android:textAlignment="center"/>
-
-                </androidx.cardview.widget.CardView>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dimen_1dp"
-                    android:background="@color/primaryTextColor"
-                    android:layout_marginVertical="@dimen/dimen_10dp"/>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/authorStoryRv"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"/>
-
-            </LinearLayout>
-
-        </androidx.core.widget.NestedScrollView>
-
-        <ProgressBar
-            android:id="@+id/authorPb"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_centerInParent="true"/>
-
-        <LinearLayout
-            android:id="@+id/retryLl"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_centerInParent="true">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/not_connected"
-                android:textAlignment="center"
-                android:layout_gravity="center_horizontal"
-                android:textColor="@color/primaryTextColor"
-                android:padding="@dimen/dimen_10dp"
-                android:textSize="@dimen/dimen_18sp"/>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/retryBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                style="@style/Widget.MaterialComponents.Button.TextButton"
-                android:text="@string/retry"
-                android:textSize="@dimen/dimen_20sp"
-                android:textColor="@color/secondaryColor"
-                android:padding="@dimen/dimen_10dp"
-                android:layout_gravity="center_horizontal"/>
-
-        </LinearLayout>
-
-    </RelativeLayout>
-
-</LinearLayout>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

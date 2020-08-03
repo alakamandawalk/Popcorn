@@ -51,10 +51,10 @@ public class SmallStoryAdapter extends RecyclerView.Adapter<SmallStoryAdapter.Pl
 
         final String storyId = storyDataList.get(position).getStoryId();
         String storyName = storyDataList.get(position).getStoryName();
-        String storyImage = storyDataList.get(position).getStoryImage();
         String timeStamp = storyDataList.get(position).getStoryDate();
         String authorId = storyDataList.get(position).getAuthorId();
         String isPremium = storyDataList.get(position).getIsPremium();
+        String playListId = storyDataList.get(position).getStoryPlaylistId();
 
         Calendar calendar = Calendar.getInstance(Locale.getDefault());
         calendar.setTimeInMillis(Long.parseLong(timeStamp));
@@ -67,16 +67,23 @@ public class SmallStoryAdapter extends RecyclerView.Adapter<SmallStoryAdapter.Pl
             holder.premiumIcon.setVisibility(View.GONE);
         }
 
-        try {
-            Picasso.get()
-                    .load(storyImage)
-                    .placeholder(R.drawable.img_place_holder)
-                    .fit()
-                    .centerCrop()
-                    .into(holder.storyImg);
-        }catch (Exception e){
-            Picasso.get().load(R.drawable.img_place_holder).into(holder.storyImg);
+        if (playListId.equals("no")){
+            String storyImage = storyDataList.get(position).getStoryImage();
+            try {
+                Picasso.get()
+                        .load(storyImage)
+                        .placeholder(R.drawable.img_place_holder)
+                        .fit()
+                        .centerCrop()
+                        .into(holder.storyImg);
+            }catch (Exception e){
+                Picasso.get().load(R.drawable.img_place_holder).into(holder.storyImg);
+            }
+        }else {
+            getImgFromPlaylist(playListId, holder);
         }
+
+
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -84,6 +91,35 @@ public class SmallStoryAdapter extends RecyclerView.Adapter<SmallStoryAdapter.Pl
                 Intent intent = new Intent(context, ReadStoryActivity.class);
                 intent.putExtra("storyId", storyId);
                 context.startActivity(intent);
+            }
+        });
+    }
+
+    private void getImgFromPlaylist(String playListId, final SmallStoryAdapter.PlaylistViewHolder holder) {
+
+        DatabaseReference imgRef = FirebaseDatabase.getInstance().getReference("playlist");
+        Query query = imgRef.orderByChild("playlistId").equalTo(playListId);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot ds: snapshot.getChildren()){
+                    String storyImage = ds.child("playlistImage").getValue().toString();
+                    try {
+                        Picasso.get()
+                                .load(storyImage)
+                                .placeholder(R.drawable.img_place_holder)
+                                .fit()
+                                .centerCrop()
+                                .into(holder.storyImg);
+                    }catch (Exception e){
+                        Picasso.get().load(R.drawable.img_place_holder).into(holder.storyImg);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
