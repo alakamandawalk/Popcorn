@@ -11,6 +11,13 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal">
 
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/authorProIv"
+            android:layout_width="@dimen/dimen_30dp"
+            android:layout_height="@dimen/dimen_30dp"
+            android:layout_gravity="top"
+            android:layout_margin="@dimen/dimen_5dp"/>
+
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -25,12 +32,22 @@
                 android:padding="@dimen/dimen_6.25dp">
 
                 <TextView
+                    android:id="@+id/authorNameTv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/dimen_12sp"
+                    android:textStyle="bold"
+                    android:layout_marginBottom="@dimen/dimen_5dp"
+                    android:textColor="@color/primaryTextColor"
+                    android:maxLines="1"/>
+
+                <TextView
                     android:id="@+id/messageTv"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/dimen_16sp"
                     android:layout_marginBottom="@dimen/dimen_5dp"
-                    android:textColor="@color/secondaryTextColor"/>
+                    android:textColor="@color/primaryTextColor"/>
 
                 <TextView
                     android:id="@+id/storyTitleTv"
@@ -38,8 +55,8 @@
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/dimen_16sp"
                     android:padding="@dimen/dimen_10dp"
-                    android:background="@color/secondaryDarkColor"
-                    android:textColor="@color/msgTagStoryNameTextColor"/>
+                    android:background="@color/secondaryLightColor"
+                    android:textColor="@color/secondaryTextColor"/>
 
             </LinearLayout>
 

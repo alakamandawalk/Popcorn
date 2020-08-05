@@ -21,7 +21,7 @@
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:padding="@dimen/dimen_5dp"
+            android:padding="@dimen/dimen_10dp"
             android:textSize="@dimen/dimen_20sp"
             android:textColor="@color/primaryTextColor"
             android:maxLines="1"
@@ -31,7 +31,7 @@
             android:id="@+id/categoryStoryCountTv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/dimen_5dp"
+            android:padding="@dimen/dimen_10dp"
             android:textSize="@dimen/dimen_20sp"
             android:textColor="@color/primaryTextColor"/>
 
@@ -41,11 +41,7 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dimen_1dp"
         android:background="@color/primaryTextColor"
-        android:layout_margin="@dimen/dimen_10dp"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/underCategoryRv"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_marginHorizontal="@dimen/dimen_10dp"
+        android:layout_marginBottom="@dimen/dimen_10dp"/>
 
 </LinearLayout>

@@ -6,14 +6,24 @@ import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.alakamandawalk.popcorn.R;
+import com.alakamandawalk.popcorn.model.AuthorData;
 import com.alakamandawalk.popcorn.model.MessageData;
 import com.alakamandawalk.popcorn.story.ReadStoryActivity;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
 import java.util.List;
@@ -44,6 +54,7 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
         String timeStamp = msgList.get(position).getMessageTime();
         final String storyId = msgList.get(position).getStoryId();
         String storyName = msgList.get(position).getStoryName();
+        String authorId = msgList.get(position).getAuthorId();
 
         Calendar calendar = Calendar.getInstance(Locale.getDefault());
         calendar.setTimeInMillis(Long.parseLong(timeStamp));
@@ -67,6 +78,42 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
             }
         });
 
+        getAuthorData(authorId, holder);
+
+    }
+
+    private void getAuthorData(String authorId, final MessageViewHolder holder) {
+
+        DatabaseReference authRef = FirebaseDatabase.getInstance().getReference("author");
+        Query query = authRef.orderByChild("authorId").equalTo(authorId);
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                for (DataSnapshot ds: snapshot.getChildren()){
+                    AuthorData authorData = ds.getValue(AuthorData.class);
+
+                    holder.authorNameTv.setText(authorData.getAuthorName());
+
+                    try {
+                        Picasso.get()
+                                .load(authorData.getAuthorProfileImage())
+                                .placeholder(R.drawable.img_place_holder)
+                                .fit()
+                                .centerCrop()
+                                .into(holder.authorProIv);
+                    }catch (Exception e){
+                        Picasso.get().load(R.drawable.img_place_holder).into(holder.authorProIv);
+                    }
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(context, error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     @Override
@@ -76,7 +123,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
 
     class MessageViewHolder extends RecyclerView.ViewHolder{
 
-        TextView messageTv, storyTitleTv, timeTv;
+        TextView messageTv, storyTitleTv, timeTv, authorNameTv;
+        ImageView authorProIv;
 
         public MessageViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -84,6 +132,8 @@ public class MessageAdapter extends RecyclerView.Adapter<MessageAdapter.MessageV
             messageTv = itemView.findViewById(R.id.messageTv);
             storyTitleTv = itemView.findViewById(R.id.storyTitleTv);
             timeTv = itemView.findViewById(R.id.timeTv);
+            authorProIv = itemView.findViewById(R.id.authorProIv);
+            authorNameTv = itemView.findViewById(R.id.authorNameTv);
         }
     }
 }

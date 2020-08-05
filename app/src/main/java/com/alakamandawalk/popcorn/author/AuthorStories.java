@@ -13,12 +13,11 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.alakamandawalk.popcorn.R;
-import com.alakamandawalk.popcorn.model.CategoryData;
+import com.alakamandawalk.popcorn.model.AuthCatData;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -32,7 +31,7 @@ import java.util.List;
 public class AuthorStories extends Fragment {
 
     RecyclerView authorCRv;
-    List<CategoryData> categoryDataList;
+    List<AuthCatData> authCatDataList;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -78,7 +77,7 @@ public class AuthorStories extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_author_stories, container, false);
+        final View view = inflater.inflate(R.layout.fragment_author_stories, container, false);
 
         String authorId = AuthorProfileActivity.authorId;
 
@@ -89,50 +88,26 @@ public class AuthorStories extends Fragment {
         layoutManager.setReverseLayout(true);
         authorCRv.setLayoutManager(layoutManager);
 
-        categoryDataList = new ArrayList<>();
+        authCatDataList = new ArrayList<>();
 
-        loadContents(authorId);
+        loadCategories(authorId);
 
         return view;
     }
 
-    private void loadContents(final String authorId) {
 
-        final ArrayList<String> catIdList = new ArrayList<>();
+    private void loadCategories(final String authorId) {
 
-        DatabaseReference authorCatRef = FirebaseDatabase.getInstance().getReference("story");
-        Query query = authorCatRef.orderByChild("authorId").equalTo(authorId);
-        query.addValueEventListener(new ValueEventListener() {
+        DatabaseReference catAuthRef = FirebaseDatabase.getInstance().getReference("catAuth").child(authorId);
+        catAuthRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                catIdList.clear();
+                authCatDataList.clear();
                 for (DataSnapshot ds: snapshot.getChildren()){
-
-                    String catId = ds.child("storyCategoryId").getValue().toString();
-                    loadCatData(catId, authorId);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
-    private void loadCatData(String catId, final String authorId) {
-
-        DatabaseReference catRef = FirebaseDatabase.getInstance().getReference("category");
-        Query query = catRef.orderByChild("categoryId").equalTo(catId);
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                categoryDataList.clear();
-                for (DataSnapshot ds: snapshot.getChildren()){
-                    CategoryData categoryData = ds.getValue(CategoryData.class);
-                     categoryDataList.add(categoryData);
-                     AuthorCategoryAdapter adapter = new AuthorCategoryAdapter(getActivity(), categoryDataList, authorId);
-                     authorCRv.setAdapter(adapter);
+                    AuthCatData authCatData = ds.getValue(AuthCatData.class);
+                    authCatDataList.add(authCatData);
+                    AuthorCategoryAdapter adapter = new AuthorCategoryAdapter(getActivity(), authCatDataList, authorId);
+                    authorCRv.setAdapter(adapter);
                 }
             }
 

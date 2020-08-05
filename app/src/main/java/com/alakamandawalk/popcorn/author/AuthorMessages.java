@@ -2,13 +2,28 @@ package com.alakamandawalk.popcorn.author;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.alakamandawalk.popcorn.R;
+import com.alakamandawalk.popcorn.message.MessageAdapter;
+import com.alakamandawalk.popcorn.model.MessageData;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -16,6 +31,9 @@ import com.alakamandawalk.popcorn.R;
  * create an instance of this fragment.
  */
 public class AuthorMessages extends Fragment {
+
+    RecyclerView authMsgRv;
+    List<MessageData> messageDataList;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -61,6 +79,44 @@ public class AuthorMessages extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_author_messages, container, false);
+        View view = inflater.inflate(R.layout.fragment_author_messages, container, false);
+
+        String authorId = AuthorProfileActivity.authorId;
+
+        authMsgRv = view.findViewById(R.id.authMsgRv);
+        messageDataList = new ArrayList<>();
+
+        LinearLayoutManager msgRvLM = new LinearLayoutManager(getActivity());
+        msgRvLM.setStackFromEnd(true);
+        authMsgRv.setLayoutManager(msgRvLM);
+        authMsgRv.setHasFixedSize(true);
+
+        loadMessages(authorId);
+
+        return view;
+    }
+
+    private void loadMessages(String authorId) {
+
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference("message");
+        Query query = reference.orderByChild("authorId").equalTo(authorId);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                messageDataList.clear();
+                for (DataSnapshot ds: dataSnapshot.getChildren()){
+                    MessageData messageData = ds.getValue(MessageData.class);
+
+                    messageDataList.add(messageData);
+                    MessageAdapter messageAdapter = new MessageAdapter(messageDataList, getActivity());
+                    authMsgRv.setAdapter(messageAdapter);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getActivity(), ""+databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 }

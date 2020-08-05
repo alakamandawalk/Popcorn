@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.alakamandawalk.popcorn.R;
 import com.alakamandawalk.popcorn.SettingsActivity;
 import com.alakamandawalk.popcorn.model.StoryData;
+import com.alakamandawalk.popcorn.story.PlaylistFilterStoryAdapter;
 import com.alakamandawalk.popcorn.story.StoryAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -51,7 +52,7 @@ public class CategoryActivity extends AppCompatActivity {
     NestedScrollView contentCategoryNsv;
     Button retryBtn;
 
-    StoryAdapter storyAdapter;
+    PlaylistFilterStoryAdapter storyAdapter;
     List<StoryData> storyDataList;
 
     String categoryImage;
@@ -66,6 +67,7 @@ public class CategoryActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         final String categoryId = intent.getStringExtra("categoryId");
+        String authorId = intent.getStringExtra("authId");
 
         backIb = findViewById(R.id.backIb);
         categoryStoryRv = findViewById(R.id.categoryStoryRv);
@@ -83,7 +85,7 @@ public class CategoryActivity extends AppCompatActivity {
 
         storyDataList = new ArrayList<>();
 
-        loadContent(categoryId);
+        loadContent(categoryId, authorId);
 
         backIb.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -95,7 +97,7 @@ public class CategoryActivity extends AppCompatActivity {
         checkNightModeActivated();
     }
 
-    private void loadContent(String categoryId) {
+    private void loadContent(String categoryId, String authId) {
 
         contentCategoryNsv.setVisibility(View.GONE);
         categoryPb.setVisibility(View.VISIBLE);
@@ -137,7 +139,11 @@ public class CategoryActivity extends AppCompatActivity {
                 }
             });
 
-            loadCategoryStories(categoryId);
+            if (authId.equals("no")){
+                loadCategoryStories(categoryId);
+            }else {
+                loadCatStoryOfAuth(categoryId, authId);
+            }
 
         }else {
             categoryPb.setVisibility(View.GONE);
@@ -147,7 +153,9 @@ public class CategoryActivity extends AppCompatActivity {
 
     }
 
-    private void loadCategoryStories(String categoryId) {
+    private void loadCatStoryOfAuth(final String categoryId, final String authId) {
+
+        final List<String> playlistIdList = new ArrayList<>();
 
         DatabaseReference categoryRef = FirebaseDatabase.getInstance().getReference("story");
         Query query = categoryRef.orderByChild("storyCategoryId").equalTo(categoryId);
@@ -156,11 +164,52 @@ public class CategoryActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 storyDataList.clear();
                 for (DataSnapshot ds: dataSnapshot.getChildren()){
-
                     StoryData storyData = ds.getValue(StoryData.class);
 
-                    storyDataList.add(storyData);
-                    storyAdapter = new StoryAdapter(CategoryActivity.this, storyDataList);
+                    if (storyData.getAuthorId().equals(authId)){
+                        if (!storyData.getStoryPlaylistId().equals("no")){
+                            if (!playlistIdList.contains(storyData.getStoryPlaylistId())){
+                                playlistIdList.add(storyData.getStoryPlaylistId());
+                                storyDataList.add(storyData);
+                            }
+                        }else {
+                            storyDataList.add(storyData);
+                        }
+                        storyAdapter = new PlaylistFilterStoryAdapter(storyDataList, CategoryActivity.this);
+                        categoryStoryRv.setAdapter(storyAdapter);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(CategoryActivity.this, databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void loadCategoryStories(String categoryId) {
+
+        final List<String> playlistIdList = new ArrayList<>();
+
+        DatabaseReference categoryRef = FirebaseDatabase.getInstance().getReference("story");
+        Query query = categoryRef.orderByChild("storyCategoryId").equalTo(categoryId);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                storyDataList.clear();
+                for (DataSnapshot ds: dataSnapshot.getChildren()){
+                    StoryData storyData = ds.getValue(StoryData.class);
+
+                    if (!storyData.getStoryPlaylistId().equals("no")){
+                        if (!playlistIdList.contains(storyData.getStoryPlaylistId())){
+                            playlistIdList.add(storyData.getStoryPlaylistId());
+                            storyDataList.add(storyData);
+                        }
+                    }else {
+                        storyDataList.add(storyData);
+                    }
+                    storyAdapter = new PlaylistFilterStoryAdapter(storyDataList, CategoryActivity.this);
                     categoryStoryRv.setAdapter(storyAdapter);
                 }
             }

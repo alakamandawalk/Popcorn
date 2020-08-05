@@ -2,17 +2,18 @@ package com.alakamandawalk.popcorn.model;
 
 public class MessageData {
 
-    String message, messageId, messageTime, storyId, storyName;
+    String message, messageId, messageTime, storyId, storyName, authorId;
 
     public MessageData() {
     }
 
-    public MessageData(String message, String messageId, String messageTime, String storyId, String storyName) {
+    public MessageData(String message, String messageId, String messageTime, String storyId, String storyName, String authorId) {
         this.message = message;
         this.messageId = messageId;
         this.messageTime = messageTime;
         this.storyId = storyId;
         this.storyName = storyName;
+        this.authorId = authorId;
     }
 
     public String getMessage() {
@@ -53,5 +54,13 @@ public class MessageData {
 
     public void setStoryName(String storyName) {
         this.storyName = storyName;
+    }
+
+    public String getAuthorId() {
+        return authorId;
+    }
+
+    public void setAuthorId(String authorId) {
+        this.authorId = authorId;
     }
 }

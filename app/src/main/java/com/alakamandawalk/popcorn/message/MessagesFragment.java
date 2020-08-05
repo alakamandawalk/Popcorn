@@ -47,7 +47,6 @@ import static com.alakamandawalk.popcorn.DashboardActivity.menuIb;
  */
 public class MessagesFragment extends Fragment {
 
-    FirebaseAuth firebaseAuth;
     List<MessageData> msgList;
     MessageAdapter messageAdapter;
     RecyclerView messagesRv;
@@ -101,7 +100,6 @@ public class MessagesFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_messages, container, false);
 
-        firebaseAuth = FirebaseAuth.getInstance();
         messagesRv = view.findViewById(R.id.messagesRv);
         retryBtn = view.findViewById(R.id.retryBtn);
         retryLl = view.findViewById(R.id.retryLl);

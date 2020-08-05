@@ -62,6 +62,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.Catego
             public void onClick(View v) {
                 Intent intent = new Intent(context, CategoryActivity.class);
                 intent.putExtra("categoryId", categoryId);
+                intent.putExtra("authId", "no");
                 context.startActivity(intent);
             }
         });

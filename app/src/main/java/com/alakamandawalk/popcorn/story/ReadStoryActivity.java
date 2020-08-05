@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.appcompat.widget.PopupMenu;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,7 +27,10 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.text.format.DateFormat;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -72,6 +76,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
+import static com.alakamandawalk.popcorn.DashboardActivity.menuIb;
 import static com.alakamandawalk.popcorn.SettingsActivity.KEY_TEXT_SIZE;
 import static com.alakamandawalk.popcorn.SettingsActivity.TEXT_SIZE_PREFERENCE;
 
@@ -80,7 +85,7 @@ public class ReadStoryActivity extends AppCompatActivity implements RewardedVide
     NestedScrollView contentRSNsv;
     Button retryBtn;
     LinearLayout retryLl;
-    ImageButton authorIb, downloadIb, playListIb, relatedStoriesIb, backIb;
+    ImageButton authorIb, downloadIb, playListIb, relatedStoriesIb, backIb, menuIb;
     TextView titleTv, storyTv, dateTv, authorNameTv, downloadBtnTipTv, readingTimeTv;
     ImageView storyImg, premiumIcon;
     RelativeLayout showRelRl;
@@ -195,6 +200,7 @@ public class ReadStoryActivity extends AppCompatActivity implements RewardedVide
         authorNameTv = findViewById(R.id.authorNameTv);
         downloadBtnTipTv = findViewById(R.id.downloadBtnTipTv);
         backIb = findViewById(R.id.backIb);
+        menuIb = findViewById(R.id.menuIb);
         premiumIcon = findViewById(R.id.premiumIcon);
     }
 
@@ -257,6 +263,13 @@ public class ReadStoryActivity extends AppCompatActivity implements RewardedVide
             }
         });
 
+        menuIb.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showPopupMenu();
+            }
+        });
+
         storyTv.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
@@ -264,6 +277,23 @@ public class ReadStoryActivity extends AppCompatActivity implements RewardedVide
                 return false;
             }
         });
+    }
+
+    private void showPopupMenu(){
+
+        final PopupMenu popupMenu = new PopupMenu(this, menuIb, Gravity.END);
+        popupMenu.getMenu().add(Menu.NONE, 0,0,getResources().getString(R.string.settings));
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                int id = item.getItemId();
+                if (id==0){
+                    startActivity(new Intent(ReadStoryActivity.this, SettingsActivity.class));
+                }
+                return false;
+            }
+        });
+        popupMenu.show();
     }
 
     SeekBar.OnSeekBarChangeListener seekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {

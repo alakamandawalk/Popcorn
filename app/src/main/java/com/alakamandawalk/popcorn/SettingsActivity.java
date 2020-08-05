@@ -15,6 +15,7 @@ import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
@@ -349,7 +350,18 @@ public class SettingsActivity extends AppCompatActivity {
     public void appInfoDialog(View view) {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setView(getLayoutInflater().inflate(R.layout.about_app_dialog, null ));
+        View view1 = LayoutInflater.from(this).inflate(R.layout.about_app_dialog, null);
+
+        TextView versionTv = view1.findViewById(R.id.appVrTv);
+
+        try {
+            PackageInfo packageInfo = SettingsActivity.this.getPackageManager().getPackageInfo(getPackageName(), 0);
+            String version = packageInfo.versionName;
+            versionTv.setText(getResources().getString(R.string.app_v)+" "+version);
+        }catch (Exception e){
+            Toast.makeText(this, ""+e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+        builder.setView(view1);
         builder.show();
     }
 }
