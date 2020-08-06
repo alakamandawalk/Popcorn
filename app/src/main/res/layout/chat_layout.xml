@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:layout_margin="@dimen/dimen_5dp">
+    android:layout_marginVertical="@dimen/dimen_5dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,8 +13,8 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/authorProIv"
-            android:layout_width="@dimen/dimen_30dp"
-            android:layout_height="@dimen/dimen_30dp"
+            android:layout_width="@dimen/dimen_40dp"
+            android:layout_height="@dimen/dimen_40dp"
             android:layout_gravity="top"
             android:layout_margin="@dimen/dimen_5dp"/>
 
@@ -55,6 +55,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/dimen_16sp"
                     android:padding="@dimen/dimen_10dp"
+                    android:textStyle="bold"
                     android:background="@color/secondaryLightColor"
                     android:textColor="@color/secondaryTextColor"/>
 
