@@ -79,10 +79,12 @@ public class SettingsActivity extends AppCompatActivity {
                 if (darkModeSw.isChecked()){
                     saveNightModeState(true);
                     getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+                    Toast.makeText(SettingsActivity.this, "you need to RESTART THE APP", Toast.LENGTH_SHORT).show();
 
                 }else {
                     saveNightModeState(false);
                     getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+                    Toast.makeText(SettingsActivity.this, "you need to RESTART THE APP", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -171,9 +173,11 @@ public class SettingsActivity extends AppCompatActivity {
             public void onClick(DialogInterface dialog, int which) {
                 if (which==0){
                     changeLocale(ENGLISH);
+                    Toast.makeText(SettingsActivity.this, "you need to RESTART THE APP", Toast.LENGTH_SHORT).show();
                     recreate();
                 }else if (which==1){
                     changeLocale(SINHALA);
+                    Toast.makeText(SettingsActivity.this, "you need to RESTART THE APP", Toast.LENGTH_SHORT).show();
                     recreate();
                 }
                 dialog.dismiss();

@@ -63,6 +63,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                style="@style/MyCardView"
                 android:layout_marginBottom="@dimen/dimen_7dp"
                 app:cardElevation="@dimen/dimen_3dp"
                 app:cardBackgroundColor="@color/primaryColor"
@@ -117,6 +118,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                style="@style/MyCardView"
                 android:layout_marginBottom="@dimen/dimen_7dp"
                 app:cardElevation="@dimen/dimen_3dp"
                 app:cardBackgroundColor="@color/primaryColor"
@@ -158,6 +160,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                style="@style/MyCardView"
                 android:layout_marginBottom="@dimen/dimen_7dp"
                 app:cardElevation="@dimen/dimen_3dp"
                 app:cardBackgroundColor="@color/primaryColor"
@@ -199,6 +202,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                style="@style/MyCardView"
                 android:layout_marginBottom="@dimen/dimen_7dp"
                 app:cardElevation="@dimen/dimen_3dp"
                 app:cardBackgroundColor="@color/primaryColor"
@@ -253,6 +257,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                style="@style/MyCardView"
                 android:layout_marginBottom="@dimen/dimen_7dp"
                 app:cardElevation="@dimen/dimen_3dp"
                 app:cardBackgroundColor="@color/primaryColor"
@@ -304,6 +309,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                style="@style/MyCardView"
                 android:layout_marginBottom="@dimen/dimen_7dp"
                 app:cardElevation="@dimen/dimen_3dp"
                 app:cardBackgroundColor="@color/primaryColor"
@@ -365,6 +371,7 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                style="@style/MyCardView"
                 android:layout_marginBottom="@dimen/dimen_7dp"
                 app:cardElevation="@dimen/dimen_3dp"
                 app:cardBackgroundColor="@color/primaryColor"

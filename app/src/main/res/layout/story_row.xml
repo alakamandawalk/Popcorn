@@ -4,6 +4,7 @@
     android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/storyCv"
+    style="@style/MyCardView"
     app:cardElevation="@dimen/dimen_2dp"
     app:cardCornerRadius="@dimen/dimen_4dp"
     android:layout_marginHorizontal="@dimen/dimen_5dp"
@@ -41,6 +42,7 @@
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/dimen_18sp"
                     android:padding="@dimen/dimen_5dp"
+                    android:textStyle="bold"
                     android:textColor="@color/primaryTextColor"/>
 
                 <LinearLayout

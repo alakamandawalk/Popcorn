@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alakamandawalk.popcorn.CountDays;
 import com.alakamandawalk.popcorn.R;
 import com.alakamandawalk.popcorn.model.AuthorData;
 import com.alakamandawalk.popcorn.model.PlaylistData;
@@ -57,10 +58,18 @@ public class PlaylistFilterStoryAdapter extends RecyclerView.Adapter<StoryAdapte
         final String playlistId = storyDataList.get(position).getStoryPlaylistId();
         String isPremium = storyDataList.get(position).getIsPremium();
         String storyImage = storyDataList.get(position).getStoryImage();
+        String now = String.valueOf(System.currentTimeMillis());
 
         Calendar calendar = Calendar.getInstance(Locale.getDefault());
         calendar.setTimeInMillis(Long.parseLong(timeStamp));
         String storyDate = DateFormat.format("dd/MM/yyyy", calendar).toString();
+
+        Calendar calendarNow = Calendar.getInstance(Locale.getDefault());
+        calendarNow.setTimeInMillis(Long.parseLong(now));
+        String timeNow = DateFormat.format("dd/MM/yyyy", calendar).toString();
+
+        CountDays countDays = new CountDays();
+        String days = countDays.getCountOfDays(storyDate, timeNow);
 
         if (playlistId.equals("no")){
 
@@ -80,7 +89,7 @@ public class PlaylistFilterStoryAdapter extends RecyclerView.Adapter<StoryAdapte
             }
 
             holder.storyNameTv.setText(storyName);
-            getAuthor(authorId, storyDate, holder);
+            getAuthor(authorId, days, holder);
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -93,6 +102,7 @@ public class PlaylistFilterStoryAdapter extends RecyclerView.Adapter<StoryAdapte
             });
         }else {
             getDataFromPlaylist(playlistId, holder);
+            holder.premiumIcon.setVisibility(View.GONE);
 
             holder.itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -114,8 +124,11 @@ public class PlaylistFilterStoryAdapter extends RecyclerView.Adapter<StoryAdapte
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot ds: snapshot.getChildren()){
-                    PlaylistData playlistData = ds.getValue(PlaylistData.class);
-                    String playlistImage = playlistData.getPlaylistImage();
+
+                    String playlistImage = ds.child("playlistImage").getValue().toString();
+                    String playlistName = ds.child("playlistName").getValue().toString();
+                    String playlistAuthorId = ds.child("playlistAuthor").getValue().toString();
+
                     try {
                         Picasso.get()
                                 .load(playlistImage)
@@ -126,9 +139,9 @@ public class PlaylistFilterStoryAdapter extends RecyclerView.Adapter<StoryAdapte
                     }catch (Exception e){
                         Picasso.get().load(R.drawable.img_place_holder).into(holder.storyImageIv);
                     }
-                    holder.storyNameTv.setText(playlistData.getPlaylistName());
-                    holder.premiumIcon.setVisibility(View.GONE);
-                    getPlaylistAuthor(playlistData.getPlaylistAuthorId(), playListId, holder);
+
+                    holder.storyNameTv.setText(playlistName);
+                    getPlaylistAuthor(playlistAuthorId, playListId, holder);
                 }
             }
 
@@ -147,8 +160,8 @@ public class PlaylistFilterStoryAdapter extends RecyclerView.Adapter<StoryAdapte
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot ds: snapshot.getChildren()){
-                    AuthorData authorData = ds.getValue(AuthorData.class);
-                    getStoryCount(authorData.getAuthorName(), playlistId, holder);
+                    String authorName = ds.child("authorName").getValue().toString();
+                    getStoryCount(authorName, playlistId, holder);
                 }
             }
 
@@ -167,7 +180,7 @@ public class PlaylistFilterStoryAdapter extends RecyclerView.Adapter<StoryAdapte
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 int count = (int) snapshot.getChildrenCount();
-                holder.authorNameAndDateTv.setText(count+"X"+" . "+authorName);
+                holder.authorNameAndDateTv.setText(count+" "+context.getResources().getString(R.string.stories)+" . "+authorName);
             }
 
             @Override

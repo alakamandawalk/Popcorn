@@ -32,6 +32,7 @@
                         android:layout_height="wrap_content"
                         app:cardBackgroundColor="@color/primaryColor"
                         app:cardCornerRadius="0dp"
+                        style="@style/MyCardView"
                         app:cardElevation="@dimen/dimen_2dp">
 
                         <LinearLayout
@@ -121,6 +122,7 @@
                         android:layout_height="wrap_content"
                         app:cardCornerRadius="@dimen/dimen_4dp"
                         app:cardElevation="@dimen/dimen_2dp"
+                        style="@style/MyCardView"
                         app:cardBackgroundColor="@color/primaryColor"
                         android:layout_marginHorizontal="@dimen/dimen_5dp">
 

@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alakamandawalk.popcorn.CountDays;
 import com.alakamandawalk.popcorn.R;
 import com.alakamandawalk.popcorn.model.StoryData;
 import com.google.firebase.database.DataSnapshot;
@@ -53,12 +54,19 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
         String storyName = storyDataList.get(position).getStoryName();
         String timeStamp = storyDataList.get(position).getStoryDate();
         String authorId = storyDataList.get(position).getAuthorId();
-        String playlistId = storyDataList.get(position).getStoryPlaylistId();
         final String isPremium = storyDataList.get(position).getIsPremium();
+        String now = String.valueOf(System.currentTimeMillis());
 
         Calendar calendar = Calendar.getInstance(Locale.getDefault());
         calendar.setTimeInMillis(Long.parseLong(timeStamp));
         String storyDate = DateFormat.format("dd/MM/yyyy", calendar).toString();
+
+        Calendar calendarNow = Calendar.getInstance(Locale.getDefault());
+        calendarNow.setTimeInMillis(Long.parseLong(now));
+        String timeNow = DateFormat.format("dd/MM/yyyy", calendar).toString();
+
+        CountDays countDays = new CountDays();
+        String days = countDays.getCountOfDays(storyDate, timeNow);
 
         if (isPremium.equals("NO")){
             holder.premiumIcon.setVisibility(View.GONE);
@@ -77,7 +85,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
         }
 
         holder.storyNameTv.setText(storyName);
-        getAuthor(authorId, storyDate, holder);
+        getAuthor(authorId, days, holder);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override

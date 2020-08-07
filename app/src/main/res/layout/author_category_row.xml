@@ -23,6 +23,7 @@
             android:layout_height="wrap_content"
             android:padding="@dimen/dimen_10dp"
             android:textSize="@dimen/dimen_20sp"
+            android:textStyle="bold"
             android:textColor="@color/primaryTextColor"
             android:maxLines="1"
             android:ellipsize="end"/>

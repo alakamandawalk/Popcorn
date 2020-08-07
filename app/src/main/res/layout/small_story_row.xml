@@ -6,6 +6,7 @@
     android:orientation="vertical"
     android:id="@+id/downloadedStoryCv"
     app:cardElevation="@dimen/dimen_2dp"
+    style="@style/MyCardView"
     android:background="@color/primaryColor"
     app:cardBackgroundColor="@color/primaryColor"
     app:cardCornerRadius="@dimen/dimen_4dp"
@@ -38,6 +39,7 @@
                 android:textSize="@dimen/dimen_18sp"
                 android:padding="@dimen/dimen_5dp"
                 android:textColor="@color/primaryTextColor"
+                android:textStyle="bold"
                 android:ellipsize="end"
                 android:maxLines="1"/>
 

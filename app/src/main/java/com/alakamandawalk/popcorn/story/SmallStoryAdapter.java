@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.alakamandawalk.popcorn.CountDays;
 import com.alakamandawalk.popcorn.R;
 import com.alakamandawalk.popcorn.model.StoryData;
 import com.google.firebase.database.DataSnapshot;
@@ -55,14 +56,22 @@ public class SmallStoryAdapter extends RecyclerView.Adapter<SmallStoryAdapter.Pl
         String authorId = storyDataList.get(position).getAuthorId();
         String isPremium = storyDataList.get(position).getIsPremium();
         String playListId = storyDataList.get(position).getStoryPlaylistId();
+        String now = String.valueOf(System.currentTimeMillis());
 
         Calendar calendar = Calendar.getInstance(Locale.getDefault());
         calendar.setTimeInMillis(Long.parseLong(timeStamp));
         String storyDate = DateFormat.format("dd/MM/yyyy", calendar).toString();
 
+        Calendar calendarNow = Calendar.getInstance(Locale.getDefault());
+        calendarNow.setTimeInMillis(Long.parseLong(now));
+        String timeNow = DateFormat.format("dd/MM/yyyy", calendar).toString();
+
+        CountDays countDays = new CountDays();
+        String days = countDays.getCountOfDays(storyDate, timeNow);
+
         getAuthor(authorId, holder);
         holder.storyNameTv.setText(storyName);
-        holder.storyDateTv.setText(storyDate);
+        holder.storyDateTv.setText(days);
         if (isPremium.equals("NO")){
             holder.premiumIcon.setVisibility(View.GONE);
         }

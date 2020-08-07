@@ -2,18 +2,18 @@ package com.alakamandawalk.popcorn.model;
 
 public class PlaylistData {
 
-    String playlistId, playlistName, playlistImage, playlistCategory, playlistDescription, playlistAuthorId;
+    String playlistId, playlistName, playlistImage, playlistCategory, playlistDescription, playlistAuthor;
 
     public PlaylistData() {
     }
 
-    public PlaylistData(String playlistId, String playlistName, String playlistImage, String playlistCategory, String playlistDescription, String playlistAuthorId) {
+    public PlaylistData(String playlistId, String playlistName, String playlistImage, String playlistCategory, String playlistDescription, String playlistAuthor) {
         this.playlistId = playlistId;
         this.playlistName = playlistName;
         this.playlistImage = playlistImage;
         this.playlistCategory = playlistCategory;
         this.playlistDescription = playlistDescription;
-        this.playlistAuthorId = playlistAuthorId;
+        this.playlistAuthor = playlistAuthor;
     }
 
     public String getPlaylistId() {
@@ -56,11 +56,11 @@ public class PlaylistData {
         this.playlistDescription = playlistDescription;
     }
 
-    public String getPlaylistAuthorId() {
-        return playlistAuthorId;
+    public String getPlaylistAuthor() {
+        return playlistAuthor;
     }
 
-    public void setPlaylistAuthorId(String playlistAuthorId) {
-        this.playlistAuthorId = playlistAuthorId;
+    public void setPlaylistAuthor(String playlistAuthor) {
+        this.playlistAuthor = playlistAuthor;
     }
 }

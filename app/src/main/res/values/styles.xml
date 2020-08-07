@@ -48,4 +48,13 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="MyCardView" parent="Widget.MaterialComponents.CardView">
+
+        <item name="cardPreventCornerOverlap">true</item>
+        <item name="android:clickable">true</item>
+        <item name="android:focusable">true</item>
+        <item name="android:foreground">?attr/selectableItemBackground</item>
+
+    </style>
+
 </resources>
