@@ -250,6 +250,15 @@
                         android:textColor="@color/primaryTextColor"
                         android:onClick="setDefaultTextSize"/>
 
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/change_font_size_tip"
+                        android:textSize="@dimen/dimen_12sp"
+                        android:padding="@dimen/dimen_10dp"
+                        android:textColor="@color/primaryTextColor"
+                        android:onClick="setDefaultTextSize"/>
+
                 </LinearLayout>
 
             </androidx.cardview.widget.CardView>

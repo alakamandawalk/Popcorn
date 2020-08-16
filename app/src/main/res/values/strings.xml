@@ -71,4 +71,5 @@
     <string name="app_info">App info</string>
     <string name="no_downloads_yet">No downloads yet\nwhen you download stories\nthey will appear here</string>
     <string name="latestStories">Latest Stories</string>
+    <string name="change_font_size_tip">(tip : touch and hold the story)</string>
 </resources>

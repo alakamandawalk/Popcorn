@@ -71,4 +71,5 @@
     <string name="app_info">ඇප් එක ගැන</string>
     <string name="no_downloads_yet">බාගත් කිසිවක් නොමැත\nඔබ කතා බාගත් විට\nඒවා මෙතනින් බලාගත හැකි වේ</string>
     <string name="latestStories">Latest Stories</string>
+    <string name="change_font_size_tip">(tip : touch and hold the story)</string>
 </resources>

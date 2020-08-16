@@ -23,6 +23,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.Calendar;
@@ -48,13 +50,14 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
     }
 
     @Override
-    public void onBindViewHolder(@NonNull StoryViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final StoryViewHolder holder, int position) {
 
         final String storyId = storyDataList.get(position).getStoryId();
         String storyName = storyDataList.get(position).getStoryName();
         String timeStamp = storyDataList.get(position).getStoryDate();
         String authorId = storyDataList.get(position).getAuthorId();
         final String isPremium = storyDataList.get(position).getIsPremium();
+        final String storyImage = storyDataList.get(position).getStoryImage();
         String now = String.valueOf(System.currentTimeMillis());
 
         Calendar calendar = Calendar.getInstance(Locale.getDefault());
@@ -72,14 +75,32 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
             holder.premiumIcon.setVisibility(View.GONE);
         }
 
-        String storyImage = storyDataList.get(position).getStoryImage();
         try {
+
             Picasso.get()
                     .load(storyImage)
                     .placeholder(R.drawable.img_place_holder)
                     .fit()
                     .centerCrop()
-                    .into(holder.storyImageIv);
+                    .networkPolicy(NetworkPolicy.OFFLINE)
+                    .into(holder.storyImageIv, new Callback() {
+
+                @Override
+                public void onSuccess() {
+
+                }
+
+                @Override
+                public void onError(Exception e) {
+                    Picasso.get()
+                            .load(storyImage)
+                            .placeholder(R.drawable.img_place_holder)
+                            .fit()
+                            .centerCrop()
+                            .into(holder.storyImageIv);
+                }
+            });
+
         }catch (Exception e){
             Picasso.get().load(R.drawable.img_place_holder).into(holder.storyImageIv);
         }

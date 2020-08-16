@@ -211,6 +211,7 @@ public class HomeFragment extends Fragment {
             if (sort.equals("shuffle")){
 
                 DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("story");
+                dbRef.keepSynced(true);
                 dbRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -239,6 +240,7 @@ public class HomeFragment extends Fragment {
             if (sort.equals("byDateAsc")){
 
                 DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("story");
+                dbRef.keepSynced(true);
                 dbRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
@@ -266,6 +268,7 @@ public class HomeFragment extends Fragment {
             if (sort.equals("byDateDsc")){
 
                 DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("story");
+                dbRef.keepSynced(true);
                 dbRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

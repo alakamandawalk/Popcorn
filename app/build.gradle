@@ -8,8 +8,8 @@ android {
         applicationId "com.alakamandawalk.popcorn"
         minSdkVersion 22
         targetSdkVersion 29
-        versionCode 4
-        versionName "2.10"
+        versionCode 6
+        versionName "2.12"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -58,6 +58,6 @@ dependencies {
     //play-services-ads
     implementation 'com.google.android.gms:play-services-ads:19.2.0'
 
-    //joda time
-    implementation 'net.danlew:android.joda:2.10.6'
+    //okHTTP
+    implementation 'com.squareup.okhttp3:okhttp:4.8.1'
 }
