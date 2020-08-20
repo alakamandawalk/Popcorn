@@ -59,6 +59,7 @@ public class Author extends Fragment {
 
 
     String authorCoverImage, authorProfileImage;
+    String storiesCountStr="STORIES";
 
     SmallStoryAdapter storyAdapter;
     List<StoryData> storyDataList;
@@ -235,6 +236,12 @@ public class Author extends Fragment {
         return conStatus;
     }
 
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        storiesCountStr = getResources().getString(R.string.stories);
+    }
+
     private void getStoryCount(String authorId){
 
         DatabaseReference idRef = FirebaseDatabase.getInstance().getReference("story");
@@ -243,7 +250,7 @@ public class Author extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 int count = (int) snapshot.getChildrenCount();
-                storyCountTv.setText(count+" "+getResources().getString(R.string.stories));
+                storyCountTv.setText(count+" "+storiesCountStr);
             }
 
             @Override

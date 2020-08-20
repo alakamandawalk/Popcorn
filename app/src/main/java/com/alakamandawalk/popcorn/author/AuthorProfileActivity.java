@@ -59,7 +59,7 @@ public class AuthorProfileActivity extends AppCompatActivity {
 
         AuthorVPAdapter authorVPAdapter = new AuthorVPAdapter(getSupportFragmentManager());
         authorVPAdapter.addFragment(new Author(), "AUTHOR");
-        authorVPAdapter.addFragment(new AuthorStories(), "PLAYLISTS");
+        authorVPAdapter.addFragment(new AuthorStories(), "STORIES");
         authorVPAdapter.addFragment(new AuthorMessages(), "MESSAGES");
         viewPager.setAdapter(authorVPAdapter);
 

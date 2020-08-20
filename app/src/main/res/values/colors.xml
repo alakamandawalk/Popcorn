@@ -24,6 +24,6 @@
     <color name="relatedListBgColor">#cc000000</color>
     <color name="imgOverlay">#00000000</color>
     <color name="gold">#FFD700</color>
-    <color name="readingTime">#8c9900</color>
+    <color name="readingTime">#000000</color>
     <color name="trncBg">#66FFFFFF</color>
 </resources>

@@ -1,6 +1,7 @@
 package com.alakamandawalk.popcorn.playlist;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.widget.NestedScrollView;
@@ -37,6 +38,9 @@ import com.google.firebase.database.ValueEventListener;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
 
@@ -164,11 +168,12 @@ public class PlaylistActivity extends AppCompatActivity {
                 storyDataList.clear();
                 for (DataSnapshot ds: snapshot.getChildren()){
                     StoryData storyData = ds.getValue(StoryData.class);
-
                     storyDataList.add(storyData);
-                    smallStoryAdapter = new SmallStoryAdapter(PlaylistActivity.this, storyDataList);
-                    playlistStoryRv.setAdapter(smallStoryAdapter);
                 }
+
+                Collections.reverse(storyDataList);
+                smallStoryAdapter = new SmallStoryAdapter(PlaylistActivity.this, storyDataList);
+                playlistStoryRv.setAdapter(smallStoryAdapter);
             }
 
             @Override

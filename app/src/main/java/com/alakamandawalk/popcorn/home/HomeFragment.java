@@ -33,6 +33,8 @@ import android.widget.Toast;
 import com.alakamandawalk.popcorn.R;
 import com.alakamandawalk.popcorn.SearchActivity;
 import com.alakamandawalk.popcorn.SettingsActivity;
+import com.alakamandawalk.popcorn.category.HomeCatAdapter;
+import com.alakamandawalk.popcorn.model.CategoryData;
 import com.alakamandawalk.popcorn.model.StoryData;
 import com.alakamandawalk.popcorn.story.StoryAdapter;
 import com.google.android.ads.nativetemplates.TemplateView;
@@ -48,6 +50,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -63,7 +66,7 @@ import static com.alakamandawalk.popcorn.DashboardActivity.menuIb;
  */
 public class HomeFragment extends Fragment {
 
-    RecyclerView storyRv;
+    RecyclerView storyRv, categoryRv, shuffledStoryRv;
     ProgressBar homePb;
     LinearLayout retryLl;
     Button retryBtn;
@@ -71,8 +74,9 @@ public class HomeFragment extends Fragment {
     TemplateView templateView;
 
     StoryAdapter storyAdapter;
-    List<StoryData> storyList;
-    FirebaseAuth firebaseAuth;
+    List<StoryData> newStoryList;
+    List<StoryData> shuffStoryList;
+    List<CategoryData> categoryDataList;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -120,8 +124,9 @@ public class HomeFragment extends Fragment {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-        firebaseAuth = FirebaseAuth.getInstance();
         storyRv = view.findViewById(R.id.storyRv);
+        categoryRv = view.findViewById(R.id.categoryRv);
+        shuffledStoryRv = view.findViewById(R.id.shuffledStoryRv);
         homePb = view.findViewById(R.id.homePb);
         retryLl = view.findViewById(R.id.retryLl);
         retryBtn = view.findViewById(R.id.retryBtn);
@@ -133,7 +138,17 @@ public class HomeFragment extends Fragment {
         storyLayoutManager.setStackFromEnd(true);
         storyLayoutManager.setReverseLayout(true);
         storyRv.setLayoutManager(storyLayoutManager);
-        storyList = new ArrayList<>();
+
+        LinearLayoutManager catLm = new LinearLayoutManager(getActivity(), LinearLayoutManager.HORIZONTAL, true);
+        catLm.setStackFromEnd(true);
+        categoryRv.setLayoutManager(catLm);
+
+        LinearLayoutManager shuffLayoutManager = new LinearLayoutManager(getActivity());
+        shuffledStoryRv.setLayoutManager(shuffLayoutManager);
+
+        newStoryList = new ArrayList<>();
+        shuffStoryList = new ArrayList<>();
+        categoryDataList = new ArrayList<>();
 
         MobileAds.initialize(getActivity(), new OnInitializationCompleteListener() {
             @Override
@@ -156,21 +171,19 @@ public class HomeFragment extends Fragment {
         AdRequest adRequest = new AdRequest.Builder().build();
         adLoader.loadAd(adRequest);
 
-
-
         menuIb.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showPopupMenu(v);
+                showPopupMenu();
             }
         });
 
-        loadStories("byDateAsc");
+        loadStories();
 
         retryBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadStories("byDateAsc");
+                loadStories();
             }
         });
 
@@ -200,7 +213,7 @@ public class HomeFragment extends Fragment {
         return conStatus;
     }
 
-    public void loadStories(final String sort) {
+    public void loadStories() {
 
         if (checkNetworkStatus()){
 
@@ -208,92 +221,10 @@ public class HomeFragment extends Fragment {
             homePb.setVisibility(View.VISIBLE);
             retryLl.setVisibility(View.GONE);
 
-            if (sort.equals("shuffle")){
+            loadNewStories();
+            loadCats();
+            loadShuffList();
 
-                DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("story");
-                dbRef.keepSynced(true);
-                dbRef.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        storyList.clear();
-                        for (DataSnapshot ds: dataSnapshot.getChildren()){
-                            StoryData storyData = ds.getValue(StoryData.class);
-                            storyList.add(storyData);
-
-                            if (storyList.size()>0){
-                                contentHomeNsv.setVisibility(View.VISIBLE);
-                                homePb.setVisibility(View.GONE);
-                            }
-                        }
-                        Collections.shuffle(storyList);
-                        storyAdapter = new StoryAdapter(getActivity(), storyList);
-                        storyRv.setAdapter(storyAdapter);
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                        Toast.makeText(getActivity(), ""+ databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-
-            if (sort.equals("byDateAsc")){
-
-                DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("story");
-                dbRef.keepSynced(true);
-                dbRef.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        storyList.clear();
-                        for (DataSnapshot ds: dataSnapshot.getChildren()){
-                            StoryData storyData = ds.getValue(StoryData.class);
-                            storyList.add(storyData);
-                            storyAdapter = new StoryAdapter(getActivity(), storyList);
-                            storyRv.setAdapter(storyAdapter);
-
-                            if (storyList.size()>0){
-                                contentHomeNsv.setVisibility(View.VISIBLE);
-                                homePb.setVisibility(View.GONE);
-                            }
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                        Toast.makeText(getActivity(), ""+ databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-            }
-
-            if (sort.equals("byDateDsc")){
-
-                DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("story");
-                dbRef.keepSynced(true);
-                dbRef.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        storyList.clear();
-                        for (DataSnapshot ds: dataSnapshot.getChildren()){
-                            StoryData storyData = ds.getValue(StoryData.class);
-                            storyList.add(storyData);
-
-                            if (storyList.size()>0){
-                                contentHomeNsv.setVisibility(View.VISIBLE);
-                                homePb.setVisibility(View.GONE);
-                            }
-                        }
-                        Collections.reverse(storyList);
-                        storyAdapter = new StoryAdapter(getActivity(), storyList);
-                        storyRv.setAdapter(storyAdapter);
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError databaseError) {
-                        Toast.makeText(getActivity(), ""+ databaseError.getMessage(), Toast.LENGTH_SHORT).show();
-                        homePb.setVisibility(View.GONE);
-                    }
-                });
-            }
 
         }else {
 
@@ -301,6 +232,82 @@ public class HomeFragment extends Fragment {
             contentHomeNsv.setVisibility(View.GONE);
             retryLl.setVisibility(View.VISIBLE);
         }
+    }
+
+    private void loadCats() {
+
+        DatabaseReference catRef = FirebaseDatabase.getInstance().getReference("category");
+        catRef.keepSynced(true);
+        catRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                categoryDataList.clear();
+                for (DataSnapshot ds: snapshot.getChildren()){
+                    CategoryData categoryData = ds.getValue(CategoryData.class);
+                    categoryDataList.add(categoryData);
+                }
+                Collections.shuffle(categoryDataList);
+                HomeCatAdapter catAdapter = new HomeCatAdapter(getActivity(), categoryDataList);
+                categoryRv.setAdapter(catAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Toast.makeText(getActivity(), error.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void loadShuffList(){
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("story");
+        dbRef.keepSynced(true);
+        dbRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                shuffStoryList.clear();
+                for (DataSnapshot ds: dataSnapshot.getChildren()){
+                    StoryData storyData = ds.getValue(StoryData.class);
+                    shuffStoryList.add(storyData);
+                }
+                Collections.shuffle(shuffStoryList);
+                storyAdapter = new StoryAdapter(getActivity(), shuffStoryList);
+                shuffledStoryRv.setAdapter(storyAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getActivity(), ""+ databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void loadNewStories(){
+
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference("story");
+        dbRef.keepSynced(true);
+        Query query = dbRef.limitToLast(3);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                newStoryList.clear();
+                for (DataSnapshot ds: dataSnapshot.getChildren()){
+                    StoryData storyData = ds.getValue(StoryData.class);
+                    newStoryList.add(storyData);
+                    storyAdapter = new StoryAdapter(getActivity(), newStoryList);
+                    storyRv.setAdapter(storyAdapter);
+
+                    if (newStoryList.size()>0){
+                        contentHomeNsv.setVisibility(View.VISIBLE);
+                        homePb.setVisibility(View.GONE);
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Toast.makeText(getActivity(), ""+ databaseError.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
     }
 
     private void checkNightModeActivated() {
@@ -315,27 +322,21 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    private void showPopupMenu(final View v){
+    private void showPopupMenu(){
 
         final PopupMenu popupMenu = new PopupMenu(getActivity(), menuIb, Gravity.END);
-        popupMenu.getMenu().add(Menu.NONE, 0,0, getResources().getString(R.string.sort_by));
-        popupMenu.getMenu().add(Menu.NONE, 1,1, getResources().getString(R.string.categories));
-        popupMenu.getMenu().add(Menu.NONE, 2,2,getResources().getString(R.string.settings));
+        popupMenu.getMenu().add(Menu.NONE, 0,0, getResources().getString(R.string.categories));
+        popupMenu.getMenu().add(Menu.NONE, 1,1, getResources().getString(R.string.settings));
         popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 int id = item.getItemId();
 
                 if (id==0){
-                    registerForContextMenu(menuIb);
-                    getActivity().openContextMenu(v);
-                }
-
-                if (id==1){
                     startActivity(new Intent(getActivity(), SearchActivity.class));
                 }
 
-                if (id==2){
+                if (id==1){
                     startActivity(new Intent(getActivity(), SettingsActivity.class));
                 }
 
@@ -343,34 +344,6 @@ public class HomeFragment extends Fragment {
             }
         });
         popupMenu.show();
-    }
-
-    @Override
-    public void onCreateContextMenu(@NonNull ContextMenu menu, @NonNull View v, @Nullable ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        MenuInflater inflater = getActivity().getMenuInflater();
-        inflater.inflate(R.menu.sort_stories_menu,menu);
-        menu.setHeaderTitle(getResources().getString(R.string.sort_by));
-    }
-
-    @Override
-    public boolean onContextItemSelected(@NonNull MenuItem item) {
-
-        switch (item.getItemId()){
-
-            case R.id.sort_shuffle:
-                loadStories("shuffle");
-                break;
-
-            case R.id.sort_by_date_asc:
-                loadStories("byDateAsc");
-                break;
-
-            case R.id.sort_by_date_dsc:
-                loadStories("byDateDsc");
-                break;
-        }
-        return true;
     }
 
 }

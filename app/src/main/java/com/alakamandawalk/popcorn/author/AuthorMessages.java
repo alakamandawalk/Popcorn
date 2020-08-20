@@ -1,8 +1,12 @@
 package com.alakamandawalk.popcorn.author;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -13,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.alakamandawalk.popcorn.R;
+import com.alakamandawalk.popcorn.SettingsActivity;
 import com.alakamandawalk.popcorn.message.MessageAdapter;
 import com.alakamandawalk.popcorn.model.MessageData;
 import com.google.firebase.database.DataSnapshot;
@@ -93,6 +98,8 @@ public class AuthorMessages extends Fragment {
 
         loadMessages(authorId);
 
+        checkNightModeActivated();
+
         return view;
     }
 
@@ -118,5 +125,17 @@ public class AuthorMessages extends Fragment {
                 Toast.makeText(getActivity(), ""+databaseError.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private void checkNightModeActivated() {
+
+        SharedPreferences themePref = getActivity().getSharedPreferences(SettingsActivity.THEME_PREFERENCE, Context.MODE_PRIVATE);
+        boolean isDarkMode = themePref.getBoolean(SettingsActivity.KEY_IS_NIGHT_MODE, false);
+
+        if (isDarkMode){
+            ((AppCompatActivity)getActivity()).getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        }else {
+            ((AppCompatActivity)getActivity()).getDelegate().setLocalNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
     }
 }

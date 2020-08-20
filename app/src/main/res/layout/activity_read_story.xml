@@ -262,10 +262,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 style="@style/MyCardView"
-                app:cardCornerRadius="@dimen/dimen_4dp"
+                app:cardCornerRadius="0dp"
                 app:cardBackgroundColor="@color/storyBgColor"
                 app:cardElevation="@dimen/dimen_2dp"
-                android:layout_margin="@dimen/dimen_5dp">
+                android:layout_marginVertical="@dimen/dimen_5dp">
 
                 <LinearLayout
                     android:layout_width="match_parent"

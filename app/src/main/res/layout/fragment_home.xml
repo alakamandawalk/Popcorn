@@ -34,6 +34,18 @@
                     android:layout_height="wrap_content"
                     android:paddingTop="@dimen/dimen_5dp"/>
 
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/categoryRv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginVertical="@dimen/dimen_10dp"/>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/shuffledStoryRv"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingTop="@dimen/dimen_5dp"/>
+
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>

@@ -56,9 +56,11 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
         String storyName = storyDataList.get(position).getStoryName();
         String timeStamp = storyDataList.get(position).getStoryDate();
         String authorId = storyDataList.get(position).getAuthorId();
+        String readingTimeInSec = storyDataList.get(position).getReadingTimeSec();
         final String isPremium = storyDataList.get(position).getIsPremium();
         final String storyImage = storyDataList.get(position).getStoryImage();
         String now = String.valueOf(System.currentTimeMillis());
+        String readingTimeInMin = Math.round((Integer.parseInt(readingTimeInSec)/60)+1)+" "+context.getResources().getString(R.string.minute);
 
         Calendar calendar = Calendar.getInstance(Locale.getDefault());
         calendar.setTimeInMillis(Long.parseLong(timeStamp));
@@ -106,7 +108,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
         }
 
         holder.storyNameTv.setText(storyName);
-        getAuthor(authorId, days, holder);
+        getAuthor(authorId, days, readingTimeInMin, holder);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,7 +127,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
         return storyDataList.size();
     }
 
-    private void getAuthor(String authorId, final String date, final StoryViewHolder holder) {
+    private void getAuthor(String authorId, final String date, final String readingTime, final StoryViewHolder holder) {
 
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference("author");
         Query query = reference.orderByChild("authorId").equalTo(authorId);
@@ -136,7 +138,7 @@ public class StoryAdapter extends RecyclerView.Adapter<StoryAdapter.StoryViewHol
                 for (DataSnapshot ds: dataSnapshot.getChildren()){
 
                     String authorName = ds.child("authorName").getValue().toString();
-                    holder.authorNameAndDateTv.setText(date+" . "+authorName);
+                    holder.authorNameAndDateTv.setText(date+" . "+authorName+" . "+readingTime);
                 }
             }
 
